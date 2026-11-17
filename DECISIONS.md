@@ -11,8 +11,12 @@ Store: kolam-clay.myshopify.com · Theme: Dawn 16.1.1 with custom sections · No
     - rest of India ₹120
     - both free on orders of ₹1,499 or more
     - international ₹1,800 flat
-  - Prices include GST. Pottery is 5%, split CGST + SGST inside Tamil Nadu and IGST elsewhere. Workshops are 18% through a collection override, because they're a service.
-  - Payments are tested with the Bogus Gateway. Footer menus link to policy pages.
+  - **GST:** prices include tax, and tax is also charged on shipping.
+    - Pottery (HSN 6912/6913) is 5%. For a Tamil Nadu address it shows as 2.5% CGST + 2.5% SGST, and for other states as 5% IGST.
+    - Workshops are a service, so they're 18% through a tax override on the Workshops collection.
+    - Shopify doesn't apply India's intra-state and inter-state rules for you. The split is set by hand: a 2.5% India rate plus 2.5% "added" for Tamil Nadu, and 5% "instead of" for every other state.
+  - **Test payments:** Shopify's Bogus Gateway. Card `1` approves and card `2` declines, so both the success and failure flows can be checked without real money.
+  - Footer menus link to the policy pages.
 - **Local currency:** Shopify only allows checkout in a second currency through Shopify Payments, and an India-based store can't use it. Creating a market with AED returned `MULTIPLE_CURRENCIES_NOT_SUPPORTED`. The header currency selector instead converts every INR price on the site for display (product, collection, search, cart). It uses daily reference rates, cached for 12 hours, with fallback rates in theme settings. The cart states that the order is charged in INR, so nobody is surprised at checkout.
 - **Alternative rejected:** showing INR only to UAE/US buyers. They're about 20% of customers, and a price they can't read is a real barrier.
 - **Limitation:** this store uses market-level shipping. A market with no delivery option shows every shippable product as sold out. It took a while to trace, so every market now has a rate.
