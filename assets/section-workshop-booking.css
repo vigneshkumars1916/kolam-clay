@@ -1,0 +1,84 @@
+.workshop__grid { display: grid; gap: 4rem; }
+.workshop__gallery { display: grid; grid-template-columns: 9.6rem 1fr; gap: 1.6rem; }
+.workshop__thumbs { display: flex; flex-direction: column; gap: 1.2rem; }
+.workshop__thumb { padding: 0; border: 2px solid transparent; border-radius: 1rem; overflow: hidden; cursor: pointer; background: none; aspect-ratio: 1 / 0.85; }
+.workshop__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.workshop__thumb[aria-selected="true"] { border-color: rgb(var(--kc-clay)); }
+.workshop__thumb:focus-visible { outline: 2px solid rgb(var(--kc-clay)); outline-offset: 2px; }
+.workshop__stage { border-radius: var(--kc-radius-lg); overflow: hidden; aspect-ratio: 1 / 0.92; background: rgba(var(--kc-sand), 1); }
+.workshop__slide, .workshop__slide img, .workshop__slide svg { width: 100%; height: 100%; }
+.workshop__slide img { object-fit: cover; display: block; }
+.workshop__included { margin-top: 2rem; padding: 2.4rem; background: rgba(var(--kc-sand), 1); border-radius: var(--kc-radius-lg); }
+.workshop__included h2 { margin: 0 0 1.6rem; }
+.workshop__included ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); }
+.workshop__included li { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1rem; padding: 0 1rem; font-size: 1.4rem; line-height: 1.35; }
+.workshop__included li + li { border-left: 1px solid var(--kc-line); }
+.workshop__included .line-icon { width: 3.6rem; height: 3.6rem; color: rgb(var(--kc-clay)); stroke-width: 1.2; }
+.workshop__intro { display: grid; gap: 2.4rem; }
+.workshop__badge { display: inline-flex; align-items: center; gap: 0.8rem; margin: 0 0 1.2rem; padding: 0.5rem 1.4rem; border-radius: 4rem; background: #F3DCC2; color: rgb(var(--kc-clay)); font-size: 1.45rem; font-weight: 500; }
+.workshop__badge .line-icon { width: 1.8rem; height: 1.8rem; }
+.workshop__title { font-size: clamp(3.4rem, 3.6vw, 5rem); margin: 0 0 1.2rem; }
+.workshop__price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.8rem 1.6rem; margin: 0 0 1.6rem; font-size: 1.5rem; }
+.workshop__amount { font-family: var(--font-heading-family); font-size: 3.6rem; line-height: 1; }
+.workshop__desc { font-size: 1.6rem; line-height: 1.65; }
+.workshop__desc p { margin: 0 0 1rem; }
+.workshop__facts { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4rem; align-content: start; }
+.workshop__facts li { display: flex; align-items: center; gap: 1.2rem; font-size: 1.5rem; }
+.workshop__facts .line-icon { width: 2.8rem; height: 2.8rem; flex: none; stroke-width: 1.3; }
+.workshop__booking { display: block; margin-top: 2.8rem; padding-top: 2.8rem; border-top: 1px solid var(--kc-line); }
+.workshop__pickers { display: grid; gap: 2.4rem; }
+.workshop__label { display: flex; align-items: center; gap: 1rem; margin: 0 0 1.4rem; padding: 0; font-family: var(--font-body-family); font-size: 1.9rem; font-weight: 600; letter-spacing: 0; }
+.workshop__label .line-icon { width: 2.4rem; height: 2.4rem; }
+.cal__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.cal__month { margin: 0; font-weight: 600; font-size: 1.8rem; }
+.cal__nav { width: 3.6rem; height: 3.6rem; border: 0; background: none; cursor: pointer; display: grid; place-items: center; color: inherit; border-radius: 50%; }
+.cal__nav:disabled { opacity: 0.3; cursor: default; }
+.cal__nav .line-icon { width: 2rem; height: 2rem; }
+.cal__grid { background: rgba(var(--kc-sand), 0.7); border-radius: 1.6rem; padding: 0.8rem; }
+.cal__row { display: grid; grid-template-columns: repeat(7, 1fr); }
+.cal__dow { text-align: center; font-size: 1.3rem; padding: 0.6rem 0; color: rgba(var(--color-foreground), 0.75); }
+.cal__cell { display: grid; place-items: center; min-height: 4.4rem; font-size: 1.45rem; }
+.cal__cell--off { color: rgba(var(--color-foreground), 0.6); }
+.cal__day { width: 4rem; height: 4rem; border-radius: 50%; border: 0; cursor: pointer; font: inherit; font-weight: 600; background: #F3DCC2; color: rgb(var(--kc-ink)); }
+.cal__day:hover, .cal__day:focus-visible { box-shadow: 0 0 0 2px rgb(var(--kc-forest)); outline: none; }
+.cal__day.is-selected { background: rgb(var(--kc-forest)); color: #fff; }
+.cal__day.is-full { background: transparent; text-decoration: line-through; color: rgba(var(--color-foreground), 0.65); }
+.workshop__slots { border: 0; margin: 0; padding: 0; min-width: 0; display: grid; gap: 1.2rem; align-content: start; }
+.workshop__slots legend { float: left; width: 100%; }
+.slot[hidden] { display: none; }
+.slot input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.slot label { display: flex; align-items: center; gap: 1.4rem; padding: 1.4rem 1.6rem; border: 1px solid var(--kc-line); border-radius: 1.4rem; cursor: pointer; background: rgb(var(--color-background)); }
+.slot label::before { content: ""; width: 2rem; height: 2rem; border-radius: 50%; border: 1.5px solid rgba(var(--color-foreground), 0.5); flex: none; }
+.slot input:checked + label { border: 2px solid rgb(var(--kc-forest)); background: rgba(47, 58, 32, 0.04); }
+.slot input:checked + label::before { border-color: rgb(var(--kc-forest)); background: radial-gradient(circle, rgb(var(--kc-forest)) 0 45%, transparent 50%); }
+.slot input:focus-visible + label { outline: 2px solid rgb(var(--kc-clay)); outline-offset: 2px; }
+.slot input:disabled + label { cursor: not-allowed; opacity: 0.6; }
+.slot__when { display: flex; flex-direction: column; flex: 1; }
+.slot__date { font-weight: 600; }
+.slot__time { font-size: 1.45rem; }
+.workshop__booking.is-filtered .slot__date { font-weight: 600; }
+.slot__seats { font-size: 1.25rem; padding: 0.4rem 1rem; border-radius: 4rem; background: #F3DCC2; white-space: nowrap; }
+.slot__seats--low { background: rgb(var(--kc-forest)); color: #fff; }
+.slot__seats--full { background: transparent; border: 1px solid currentColor; }
+.workshop__form { margin-top: 2.4rem; }
+.workshop__form .form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 2rem; }
+.workshop__qty { flex: 0 0 auto; }
+.workshop__stepper { display: inline-flex; align-items: center; border: 1px solid rgba(var(--color-foreground), 0.25); border-radius: 4rem; height: 5.6rem; }
+.workshop__stepper button { width: 5.2rem; height: 100%; border: 0; background: none; cursor: pointer; font-size: 2.2rem; color: inherit; border-radius: 4rem; }
+.workshop__stepper input { width: 4.4rem; border: 0; text-align: center; font: inherit; font-size: 1.8rem; background: none; -moz-appearance: textfield; }
+.workshop__stepper input::-webkit-outer-spin-button, .workshop__stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.workshop__submit { flex: 1 1 24rem; min-height: 5.6rem; font-size: 1.8rem; }
+@media screen and (min-width: 990px) {
+  .workshop__grid { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 5.6rem; }
+  .workshop__intro { grid-template-columns: 1fr 22rem; }
+  .workshop__facts { padding-left: 2.8rem; border-left: 1px solid var(--kc-line); }
+  .workshop__booking.has-calendar .workshop__pickers { grid-template-columns: 1fr 1fr; gap: 3.2rem; }
+  .workshop__booking.has-calendar .workshop__slots { padding-left: 3.2rem; border-left: 1px solid var(--kc-line); }
+}
+@media screen and (max-width: 749px) {
+  .workshop__gallery { grid-template-columns: 1fr; }
+  .workshop__thumbs { flex-direction: row; order: 2; overflow-x: auto; }
+  .workshop__thumb { flex: 0 0 7.2rem; }
+  .workshop__included li + li { border-left: 0; }
+  .workshop__included ul { grid-template-columns: 1fr 1fr; row-gap: 2rem; }
+}

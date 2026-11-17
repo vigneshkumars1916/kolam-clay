@@ -34,6 +34,171 @@
     ]
   },
   {
+    "name": "Studio & brand",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Text logo",
+        "info": "Shown when no logo image is uploaded under Logo."
+      },
+      {
+        "type": "text",
+        "id": "wordmark_name",
+        "label": "Name",
+        "default": "Kolam & Clay"
+      },
+      {
+        "type": "text",
+        "id": "wordmark_tagline",
+        "label": "Tagline",
+        "default": "Pottery Studio"
+      },
+      {
+        "type": "checkbox",
+        "id": "wordmark_emblem",
+        "label": "Show pot emblem",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_leaves",
+        "label": "Show leaf decorations",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Decoration"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_ornaments",
+        "label": "Show kolam ornaments",
+        "default": true
+      },
+      {
+        "type": "color",
+        "id": "ornament_color",
+        "label": "Ornament colour",
+        "default": "#C0712E"
+      },
+      {
+        "type": "header",
+        "content": "Glaze swatches",
+        "info": "One glaze per line as Name:#hex. Used on product pages, product cards and filters."
+      },
+      {
+        "type": "textarea",
+        "id": "glaze_swatches",
+        "label": "Glaze colours",
+        "default": "Matte Beige:#E6D3BC\nOcean Blue:#2F5F78\nEarthy Brown:#8A4320\nSage Green:#8FA27A"
+      },
+      {
+        "type": "text",
+        "id": "glaze_option_names",
+        "label": "Option names treated as glaze",
+        "default": "Glaze,Colour,Color",
+        "info": "Comma separated."
+      },
+      {
+        "type": "header",
+        "content": "One-of-a-kind pieces"
+      },
+      {
+        "type": "text",
+        "id": "ooak_badge",
+        "label": "Badge text",
+        "default": "One of a kind"
+      },
+      {
+        "type": "text",
+        "id": "ooak_low_stock",
+        "label": "Available label",
+        "default": "Only 1 made"
+      },
+      {
+        "type": "text",
+        "id": "ooak_sold_badge",
+        "label": "Sold badge text",
+        "default": "Sold · From our archive"
+      },
+      {
+        "type": "richtext",
+        "id": "ooak_sold_message",
+        "label": "Sold message on product page",
+        "default": "<p>This piece has found its home. We keep it here as part of our portfolio — every one-of-a-kind is made only once.</p>"
+      },
+      {
+        "type": "header",
+        "content": "Studio details",
+        "info": "Used in search engine structured data and the workshop page."
+      },
+      {
+        "type": "text",
+        "id": "studio_street",
+        "label": "Street address",
+        "default": "14, 2nd Cross Street, Gandhi Nagar"
+      },
+      {
+        "type": "text",
+        "id": "studio_locality",
+        "label": "Area and city",
+        "default": "Adyar, Chennai"
+      },
+      {
+        "type": "text",
+        "id": "studio_region",
+        "label": "State",
+        "default": "Tamil Nadu"
+      },
+      {
+        "type": "text",
+        "id": "studio_postcode",
+        "label": "PIN code",
+        "default": "600020"
+      },
+      {
+        "type": "text",
+        "id": "studio_phone",
+        "label": "Phone",
+        "default": "+91 98400 00000"
+      },
+      {
+        "type": "text",
+        "id": "studio_founded",
+        "label": "Year founded",
+        "default": "2019"
+      },
+      {
+        "type": "header",
+        "content": "Gift notes in the cart"
+      },
+      {
+        "type": "text",
+        "id": "gift_note_label",
+        "label": "Field label",
+        "default": "Add a gift note (up to 40 characters)"
+      },
+      {
+        "type": "text",
+        "id": "gift_note_placeholder",
+        "label": "Placeholder",
+        "default": "Happy housewarming, Anu!"
+      },
+      {
+        "type": "text",
+        "id": "gift_note_save",
+        "label": "Save button",
+        "default": "Save note"
+      },
+      {
+        "type": "text",
+        "id": "gift_note_saved",
+        "label": "Saved message",
+        "default": "Note saved"
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.colors.name",
     "settings": [
       {
@@ -1464,6 +1629,48 @@
         "id": "customer_account_menu",
         "default": "customer-account-main-menu",
         "label": "t:settings_schema.customer_accounts.settings.customer_account_menu.label"
+      }
+    ]
+  },
+  {
+    "name": "Currency converter",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Lets shoppers see prices in their own currency. Orders are still charged in your store currency at checkout."
+      },
+      {
+        "type": "checkbox",
+        "id": "cc_enable",
+        "label": "Show currency selector in the header",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "cc_currencies",
+        "label": "Currencies",
+        "default": "INR,USD,EUR,GBP,AED,SGD,AUD,CAD",
+        "info": "Currency codes separated by commas. The first one is shown by default."
+      },
+      {
+        "type": "checkbox",
+        "id": "cc_live_rates",
+        "label": "Update exchange rates automatically",
+        "default": true,
+        "info": "Uses daily European Central Bank reference rates. The backup rates below are used if the update can’t load."
+      },
+      {
+        "type": "textarea",
+        "id": "cc_fallback_rates",
+        "label": "Backup rates (per 1 INR)",
+        "default": "USD:0.010647, EUR:0.0096665, GBP:0.0080667, AED:0.039101, SGD:0.013722, AUD:0.015757, CAD:0.015209"
+      },
+      {
+        "type": "text",
+        "id": "cc_checkout_note",
+        "label": "Cart note for other currencies",
+        "default": "Prices in {currency} are a guide. Your order is charged in Indian rupees (INR) at checkout.",
+        "info": "Shown in the cart when a shopper picks a currency other than INR. {currency} is replaced with their choice."
       }
     ]
   }

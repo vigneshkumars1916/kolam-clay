@@ -1,0 +1,59 @@
+{%- doc -%}
+  Extra details under the price on product cards: glaze swatches linking to that glaze,
+  "only one made" for one-of-a-kind pieces, and seats left for the next workshop session.
+
+  @param {product} card_product - Product shown in the card
+{%- enddoc -%}
+{%- liquid
+  assign glaze_option = blank
+  for option in card_product.options_with_values
+    capture is_glaze
+      render 'is-glaze-option', option_name: option.name
+    endcapture
+    if is_glaze == 'true'
+      assign glaze_option = option
+      break
+    endif
+  endfor
+-%}
+{%- if glaze_option != blank and glaze_option.values.size > 1 -%}
+  <ul class="kc-card-swatches" role="list" aria-label="{{ glaze_option.name | escape }}">
+    {%- for value in glaze_option.values -%}
+      {%- liquid
+        assign target = blank
+        for v in card_product.variants
+          if v.options contains value
+            assign target = v
+            if v.available
+              break
+            endif
+          endif
+        endfor
+      -%}
+      <li>
+        <a href="{{ target.url | default: card_product.url }}" style="--swatch: {% render 'glaze-color', name: value %};" title="{{ value | escape }}">
+          <span class="kc-visually-hidden">{{ card_product.title | escape }} – {{ value | escape }}</span>
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+{%- endif -%}
+{%- if card_product.metafields.custom.one_of_a_kind.value and card_product.available -%}
+  <p class="kc-card-note kc-card-note--pill">{{ settings.ooak_low_stock }}</p>
+{%- endif -%}
+{%- if card_product.type == 'Workshop' -%}
+  {%- liquid
+    assign next_session = nil
+    for v in card_product.variants
+      if v.available
+        assign next_session = v
+        break
+      endif
+    endfor
+  -%}
+  {%- if next_session -%}
+    <p class="kc-card-note">{%- render 'line-icon', name: 'calendar' -%}{{ next_session.option1 }} · {{ next_session.inventory_quantity }} seats left</p>
+  {%- else -%}
+    <p class="kc-card-note">{%- render 'line-icon', name: 'calendar' -%}New dates soon</p>
+  {%- endif -%}
+{%- endif -%}

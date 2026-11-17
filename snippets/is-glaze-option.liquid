@@ -1,0 +1,16 @@
+{%- doc -%}
+  Outputs "true" when an option name is configured as a glaze option in theme settings.
+
+  @param {string} option_name - Product option name
+{%- enddoc -%}
+{%- liquid
+  assign wanted = option_name | strip | downcase
+  assign names = settings.glaze_option_names | split: ','
+  for n in names
+    assign candidate = n | strip | downcase
+    if candidate == wanted
+      echo 'true'
+      break
+    endif
+  endfor
+-%}

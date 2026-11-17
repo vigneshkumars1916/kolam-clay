@@ -1,0 +1,547 @@
+{{ 'section-studio-story.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  Studio story — tells how Kolam & Clay began.
+  Content lives in blocks so the founders can add, remove and reorder each part.
+  Layout, image ratio, alignment and colours are section settings.
+{%- endcomment -%}
+{%- liquid
+  assign layout = section.settings.layout
+  assign heading_tag = 'h2'
+  if section.settings.heading_as_h1
+    assign heading_tag = 'h1'
+  endif
+-%}
+
+<div
+  class="studio-story color-{{ section.settings.color_scheme }} gradient kc-section"
+  style="--kc-pt: {{ section.settings.padding_top }}px; --kc-pb: {{ section.settings.padding_bottom }}px; --story-split: {{ section.settings.media_share }}%;"
+>
+  <div class="page-width{% if section.settings.full_bleed_panel %} page-width--narrow-none{% endif %}">
+    <div class="studio-story__panel studio-story--{{ layout }} studio-story--align-{{ section.settings.vertical_align }}{% if section.settings.mobile_text_first %} studio-story--text-first{% endif %}{% if section.settings.panel %} studio-story--panel{% endif %}">
+      <div class="studio-story__media studio-story__media--{{ section.settings.image_ratio }}">
+        <div class="studio-story__frame">
+          {%- if section.settings.image != blank -%}
+            {{
+              section.settings.image
+              | image_url: width: 1400
+              | image_tag:
+                widths: '480, 720, 960, 1200, 1400',
+                sizes: '(min-width: 990px) 55vw, 100vw',
+                loading: 'lazy',
+                alt: section.settings.image.alt
+            }}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+        {%- if layout == 'collage' and section.settings.image_2 != blank -%}
+          <div class="studio-story__frame studio-story__frame--inset">
+            {{
+              section.settings.image_2
+              | image_url: width: 700
+              | image_tag: widths: '360, 520, 700', sizes: '(min-width: 990px) 22vw, 45vw', loading: 'lazy', alt: section.settings.image_2.alt
+            }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="studio-story__content studio-story__content--{{ section.settings.text_align }}">
+        {%- if section.settings.accent_image != blank -%}
+          <div class="studio-story__accent studio-story__accent--{{ section.settings.accent_position }}" aria-hidden="true">
+            {{ section.settings.accent_image | image_url: width: 520 | image_tag: loading: 'lazy', alt: '' }}
+          </div>
+        {%- endif -%}
+
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'eyebrow' -%}
+              <p class="kc-eyebrow studio-story__eyebrow" {{ block.shopify_attributes }}>
+                {%- render 'kolam-ornament', variant: 'flourish' -%}
+                <span>{{ block.settings.text }}</span>
+              </p>
+            {%- when 'heading' -%}
+              <{{ heading_tag }} class="studio-story__heading {{ block.settings.size }}" {{ block.shopify_attributes }}>
+                {{- block.settings.heading | newline_to_br -}}
+              </{{ heading_tag }}>
+              {%- assign heading_tag = 'h3' -%}
+            {%- when 'text' -%}
+              <div class="studio-story__text kc-rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+            {%- when 'quote' -%}
+              <figure class="studio-story__quote" {{ block.shopify_attributes }}>
+                <blockquote><p>{{ block.settings.quote }}</p></blockquote>
+                {%- if block.settings.author != blank -%}
+                  <figcaption>— {{ block.settings.author }}</figcaption>
+                {%- endif -%}
+              </figure>
+            {%- when 'stats' -%}
+              <dl class="studio-story__stats" {{ block.shopify_attributes }}>
+                {%- for i in (1..3) -%}
+                  {%- assign value_key = 'value_' | append: i -%}
+                  {%- assign label_key = 'label_' | append: i -%}
+                  {%- if block.settings[value_key] != blank -%}
+                    <div>
+                      <dt>{{ block.settings[label_key] }}</dt>
+                      <dd>{{ block.settings[value_key] }}</dd>
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </dl>
+            {%- when 'founders' -%}
+              <div class="studio-story__founders" {{ block.shopify_attributes }}>
+                {%- if block.settings.portrait != blank -%}
+                  {{ block.settings.portrait | image_url: width: 160 | image_tag: loading: 'lazy', width: 56, height: 56, alt: block.settings.portrait.alt }}
+                {%- endif -%}
+                <p>
+                  <span class="studio-story__founders-names">{{ block.settings.names }}</span>
+                  <span class="kc-muted">{{ block.settings.role }}</span>
+                </p>
+              </div>
+            {%- when 'button' -%}
+              {%- if block.settings.label != blank -%}
+                <div class="kc-buttons studio-story__buttons" {{ block.shopify_attributes }}>
+                  <a href="{{ block.settings.link | default: '#' }}" class="button {{ block.settings.style }}">
+                    {{- block.settings.label -}}
+                    {%- render 'line-icon', name: 'arrow' -%}
+                  </a>
+                </div>
+              {%- endif -%}
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{%- unless section.settings.leaves == 'none' or section.settings.leaves == blank -%}
+  {%- assign leaf_class = 'leaf-sprig--' | append: section.settings.leaves -%}
+  {%- render 'leaf-sprig', class: leaf_class -%}
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Studio story",
+  "tag": "section",
+  "class": "section section-studio-story",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Main image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Second image",
+      "info": "Shown with the Collage layout."
+    },
+    {
+      "type": "image_picker",
+      "id": "accent_image",
+      "label": "Background illustration",
+      "info": "A light sketch behind the text, such as a temple or plant drawing."
+    },
+    {
+      "type": "select",
+      "id": "accent_position",
+      "label": "Illustration position",
+      "default": "top-right",
+      "options": [
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        },
+        {
+          "value": "top-left",
+          "label": "Top left"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "default": "image_left",
+      "options": [
+        {
+          "value": "image_left",
+          "label": "Image left"
+        },
+        {
+          "value": "image_right",
+          "label": "Image right"
+        },
+        {
+          "value": "collage",
+          "label": "Collage (two images)"
+        },
+        {
+          "value": "stacked",
+          "label": "Image above text"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image shape",
+      "default": "landscape",
+      "options": [
+        {
+          "value": "landscape",
+          "label": "Landscape"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "wide",
+          "label": "Wide banner"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "media_share",
+      "label": "Image width on desktop",
+      "min": 35,
+      "max": 65,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "select",
+      "id": "vertical_align",
+      "label": "Vertical alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text alignment",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "panel",
+      "label": "Show as a framed panel",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_text_first",
+      "label": "Show text before image on mobile",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_as_h1",
+      "label": "Use the heading as the page title (H1)",
+      "default": false,
+      "info": "Turn on only when this section opens a page, such as About us."
+    },
+    {
+      "type": "header",
+      "content": "Colour and spacing"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Colour scheme",
+      "default": "scheme-5"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "select",
+      "id": "leaves",
+      "label": "Leaf decoration",
+      "default": "top-left",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "eyebrow",
+      "name": "Small label",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Our story"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "heading",
+          "label": "Heading",
+          "default": "A little studio,\nbig dreams"
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Size",
+          "default": "h0",
+          "options": [
+            {
+              "value": "h0",
+              "label": "Large"
+            },
+            {
+              "value": "h1",
+              "label": "Medium"
+            },
+            {
+              "value": "h2",
+              "label": "Small"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Kolam & Clay is a two-person pottery studio in Chennai. We throw, trim and glaze every piece ourselves, borrowing the patterns our grandmothers drew on the threshold each morning.</p>"
+        }
+      ]
+    },
+    {
+      "type": "quote",
+      "name": "Quote",
+      "settings": [
+        {
+          "type": "text",
+          "id": "quote",
+          "label": "Quote",
+          "default": "We make the pieces we wanted on our own kitchen shelves."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Attribution",
+          "default": "Meera & Arjun"
+        }
+      ]
+    },
+    {
+      "type": "stats",
+      "name": "Numbers",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "value_1",
+          "label": "Number 1",
+          "default": "2019"
+        },
+        {
+          "type": "text",
+          "id": "label_1",
+          "label": "Label 1",
+          "default": "First firing"
+        },
+        {
+          "type": "text",
+          "id": "value_2",
+          "label": "Number 2",
+          "default": "2"
+        },
+        {
+          "type": "text",
+          "id": "label_2",
+          "label": "Label 2",
+          "default": "Potters, one wheel each"
+        },
+        {
+          "type": "text",
+          "id": "value_3",
+          "label": "Number 3",
+          "default": "1,200+"
+        },
+        {
+          "type": "text",
+          "id": "label_3",
+          "label": "Label 3",
+          "default": "Students at our workshops"
+        }
+      ]
+    },
+    {
+      "type": "founders",
+      "name": "Founders",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "type": "text",
+          "id": "names",
+          "label": "Names",
+          "default": "Meera & Arjun"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role",
+          "default": "Founders and potters"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Know more about us"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Style",
+          "default": "button--clay",
+          "options": [
+            {
+              "value": "button--clay",
+              "label": "Clay"
+            },
+            {
+              "value": "button--forest",
+              "label": "Forest"
+            },
+            {
+              "value": "button--secondary",
+              "label": "Outline"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Studio story",
+      "blocks": [
+        {
+          "type": "eyebrow"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

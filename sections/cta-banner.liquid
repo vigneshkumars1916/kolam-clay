@@ -1,0 +1,145 @@
+<div class="cta-banner-wrap kc-section color-{{ section.settings.section_scheme }}" style="--kc-pt: {{ section.settings.padding_top }}px; --kc-pb: {{ section.settings.padding_bottom }}px;">
+  <div class="page-width">
+    <div class="cta-banner color-{{ section.settings.color_scheme }} gradient">
+      {%- if section.settings.image != blank -%}
+        <div class="cta-banner__image">{{ section.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', alt: '' }}</div>
+      {%- endif -%}
+      <div class="cta-banner__copy">
+        {%- if section.settings.heading != blank -%}<h2 class="h2">{{ section.settings.heading }}</h2>{%- endif -%}
+        {%- if section.settings.text != blank -%}<div class="kc-rte">{{ section.settings.text }}</div>{%- endif -%}
+      </div>
+      {%- if section.settings.button_label != blank -%}
+        <a class="button button--secondary cta-banner__btn" href="{{ section.settings.link | default: routes.root_url }}">{{ section.settings.button_label }}{%- render 'line-icon', name: 'arrow' -%}</a>
+      {%- endif -%}
+      {%- if section.settings.show_ornament -%}{%- render 'kolam-ornament', class: 'cta-banner__ornament' -%}{%- endif -%}
+    </div>
+  </div>
+</div>
+<style>
+  .cta-banner { position: relative; overflow: hidden; display: flex; align-items: center; gap: 3.2rem; border-radius: var(--kc-radius-lg); padding: 0 4rem 0 0; min-height: 11rem; }
+  .cta-banner__image { align-self: stretch; width: 28rem; flex: none; -webkit-mask-image: linear-gradient(90deg, #000 60%, transparent); mask-image: linear-gradient(90deg, #000 60%, transparent); }
+  .cta-banner__image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cta-banner__copy { flex: 1; padding: 2.4rem 0; }
+  .cta-banner__copy h2 { margin: 0 0 0.6rem; }
+  .cta-banner__copy .kc-rte { font-size: 1.7rem; }
+  .cta-banner__btn { flex: none; position: relative; z-index: 1; }
+  .cta-banner__ornament { position: absolute; right: -2rem; bottom: -3rem; width: 11rem; opacity: 0.35; }
+  @media screen and (max-width: 749px) {
+    .cta-banner { flex-direction: column; align-items: flex-start; padding: 0 2.4rem 2.4rem; gap: 1.2rem; }
+    .cta-banner__image { width: calc(100% + 4.8rem); margin: 0 -2.4rem; height: 16rem; -webkit-mask-image: linear-gradient(0deg, transparent, #000 40%); mask-image: linear-gradient(0deg, transparent, #000 40%); }
+    .cta-banner__copy { padding: 0; }
+  }
+</style>
+{%- unless section.settings.leaves == 'none' or section.settings.leaves == blank -%}
+  {%- assign leaf_class = 'leaf-sprig--' | append: section.settings.leaves -%}
+  {%- render 'leaf-sprig', class: leaf_class -%}
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Call to action banner",
+  "tag": "section",
+  "class": "section section-cta-banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Planning a group session?"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Book a private workshop for friends, family or your team.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Enquire for group booking"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_ornament",
+      "label": "Show kolam ornament",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Banner colour scheme",
+      "default": "scheme-5"
+    },
+    {
+      "type": "color_scheme",
+      "id": "section_scheme",
+      "label": "Section colour scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "select",
+      "id": "leaves",
+      "label": "Leaf decoration",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Call to action banner"
+    }
+  ]
+}
+{% endschema %}

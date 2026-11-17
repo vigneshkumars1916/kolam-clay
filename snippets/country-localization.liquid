@@ -2,6 +2,7 @@
   Renders the country picker for a localization form.
 
   @param {string} localPosition - A position-specific prefix used to create unique country-selector IDs.
+  @param {boolean} [compact] - Shows the flag and currency code only. Used in the header.
 
   @example
   {% render 'country-localization', localPosition: 'FooterCountry' %}
@@ -35,11 +36,20 @@
     aria-controls="{{ localPosition }}-country-results"
     aria-describedby="{{ localPosition }}Label"
   >
+    {%- if compact -%}
+      <span class="currency-pill">
+        <span class="currency-pill__flag">{{ localization.country | image_url: width: 40 | image_tag: alt: '', width: 20, height: 14, loading: 'lazy' }}</span>
+        <span class="currency-pill__code">{{ localization.country.currency.iso_code }}</span>
+        <span class="currency-pill__symbol">{{ localization.country.currency.symbol }}</span>
+        <span class="visually-hidden">{{ localization.country.name }}</span>
+      </span>
+    {%- else -%}
     <span>
       {{- localization.country.name }} |
       {{ localization.country.currency.iso_code }}
       {{ localization.country.currency.symbol -}}
     </span>
+    {%- endif -%}
     {{ 'icon-caret.svg' | inline_asset_content }}
   </button>
   <div class="disclosure__list-wrapper country-selector" hidden>
@@ -113,7 +123,8 @@
                 >
                   {{- 'icon-checkmark.svg' | inline_asset_content -}}
                 </span>
-                <span class="country">{{- country.name }}</span>
+                <span class="country-flag">{{ country | image_url: width: 40 | image_tag: alt: "", width: 20, height: 14, loading: "lazy" }}</span>
+              <span class="country">{{- country.name }}</span>
                 <span class="localization-form__currency motion-reduce{% unless show_currencies %} hidden{% endunless %}">
                   {{ country.currency.iso_code }}
                   {{ country.currency.symbol -}}
@@ -142,6 +153,7 @@
               >
                 {{- 'icon-checkmark.svg' | inline_asset_content -}}
               </span>
+              <span class="country-flag">{{ country | image_url: width: 40 | image_tag: alt: "", width: 20, height: 14, loading: "lazy" }}</span>
               <span class="country">{{- country.name }}</span>
               <span class="localization-form__currency motion-reduce{% unless show_currencies %} hidden{% endunless %}">
                 {{ country.currency.iso_code }}

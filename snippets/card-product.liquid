@@ -129,7 +129,8 @@
               </h3>
             </div>
             <div class="card__badge {{ settings.badge_position }}">
-              {%- if card_product.available == false -%}
+              {%- render 'card-badges', card_product: card_product -%}
+              {%- if card_product.available == false and card_product.metafields.custom.one_of_a_kind.value != true -%}
                 <span
                   id="NoMediaStandardBadge-{{ section_id }}-{{ card_product.id }}"
                   class="badge badge--bottom-left color-{{ settings.sold_out_badge_color_scheme }}"
@@ -209,6 +210,7 @@
               {%- endif -%}
 
               {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+              {%- render 'card-extras', card_product: card_product -%}
               {%- if card_product.quantity_price_breaks_configured? -%}
                 {% if card_product.variants_count == 1 and quick_add == 'bulk' %}
                   {% liquid
@@ -517,6 +519,7 @@
                             <h3>{{ card_product.title | escape }}</h3>
                           </a>
                           {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+                          {%- render 'card-extras', card_product: card_product -%}
                           {%- if card_product.quantity_price_breaks_configured? -%}
                             <div class="card__information-volume-pricing-note">
                               <span class="caption">{{ 'products.product.volume_pricing.note' | t }}</span>
@@ -532,6 +535,7 @@
                             </h3>
                           </a>
                           {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+                          {%- render 'card-extras', card_product: card_product -%}
                           {%- if card_product.quantity_price_breaks_configured? -%}
                             <div class="card__information-volume-pricing-note">
                               <span class="caption">{{ 'products.product.volume_pricing.note' | t }}</span>
@@ -553,7 +557,8 @@
             {% endif %}
           {% endif %}
           <div class="card__badge {{ settings.badge_position }}">
-            {%- if card_product.available == false -%}
+            {%- render 'card-badges', card_product: card_product -%}
+            {%- if card_product.available == false and card_product.metafields.custom.one_of_a_kind.value != true -%}
               <span
                 id="Badge-{{ section_id }}-{{ card_product.id }}"
                 class="badge badge--bottom-left color-{{ settings.sold_out_badge_color_scheme }}"

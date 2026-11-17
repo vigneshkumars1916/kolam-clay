@@ -1,0 +1,155 @@
+{{ 'section-product-tabs.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  Product information tabs. Each tab is a block: "Product details" reads the product's
+  specification metafields; "Content" tabs hold text the founders write once in the editor.
+{%- endcomment -%}
+<product-tabs class="product-tabs color-{{ section.settings.color_scheme }} kc-section" style="--kc-pt: {{ section.settings.padding_top }}px; --kc-pb: {{ section.settings.padding_bottom }}px;">
+  <div class="page-width">
+    <div class="product-tabs__list" role="tablist" aria-label="{{ section.settings.label | escape }}">
+      {%- for block in section.blocks -%}
+        <button
+          type="button"
+          role="tab"
+          id="Tab-{{ block.id }}"
+          aria-controls="Panel-{{ block.id }}"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+          class="product-tabs__tab"
+          {{ block.shopify_attributes }}
+        >{{ block.settings.title }}</button>
+      {%- endfor -%}
+    </div>
+
+    {%- for block in section.blocks -%}
+      <div
+        class="product-tabs__panel"
+        role="tabpanel"
+        id="Panel-{{ block.id }}"
+        aria-labelledby="Tab-{{ block.id }}"
+        tabindex="0"
+        {% unless forloop.first %}hidden{% endunless %}
+      >
+        {%- case block.type -%}
+          {%- when 'details' -%}
+            <div class="product-details">
+              <dl class="product-details__specs">
+                {%- liquid
+                  assign specs = 'material,finish,capacity,dimensions' | split: ','
+                  assign icons = 'vase,layers,cup,ruler' | split: ','
+                -%}
+                {%- for key in specs -%}
+                  {%- assign field = product.metafields.custom[key] -%}
+                  {%- if field != blank -%}
+                    {%- assign label_key = key | append: '_label' -%}
+                    <div class="product-details__row">
+                      {%- render 'line-icon', name: icons[forloop.index0] -%}
+                      <div>
+                        <dt>{{ block.settings[label_key] }}</dt>
+                        <dd>{{ field.value | newline_to_br }}</dd>
+                      </div>
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </dl>
+              {%- assign story = product.metafields.custom.story.value -%}
+              {%- if story != blank -%}
+                <div class="product-details__story">
+                  {%- render 'kolam-ornament', class: 'product-details__ornament' -%}
+                  <div>
+                    <h2 class="h3">{{ block.settings.story_heading }}</h2>
+                    <p>{{ story | newline_to_br }}</p>
+                  </div>
+                </div>
+              {%- endif -%}
+              {%- assign story_image = product.metafields.custom.story_image.value | default: product.media[1].preview_image -%}
+              {%- if story_image and block.settings.show_image -%}
+                <div class="product-details__image">
+                  {{ story_image | image_url: width: 900 | image_tag: widths: '400, 600, 900', sizes: '(min-width: 990px) 30vw, 100vw', loading: 'lazy', alt: story_image.alt | default: product.title }}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- when 'content' -%}
+            <div class="product-tabs__rte kc-rte rte">
+              {{ block.settings.content }}
+              {%- if block.settings.page != blank -%}{{ block.settings.page.content }}{%- endif -%}
+            </div>
+          {%- when 'description' -%}
+            <div class="product-tabs__rte rte">{{ product.description }}</div>
+        {%- endcase -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</product-tabs>
+
+<script>
+  if (!customElements.get('product-tabs')) {
+    customElements.define('product-tabs', class extends HTMLElement {
+      connectedCallback() {
+        this.tabs = [...this.querySelectorAll('[role="tab"]')];
+        this.tabs.forEach((tab, i) => {
+          tab.addEventListener('click', () => this.select(i));
+          tab.addEventListener('keydown', (e) => {
+            const map = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: this.tabs.length - 1 };
+            if (!(e.key in map)) return;
+            e.preventDefault();
+            const next = (map[e.key] + this.tabs.length) % this.tabs.length;
+            this.select(next);
+            this.tabs[next].focus();
+          });
+        });
+      }
+      select(index) {
+        this.tabs.forEach((tab, i) => {
+          const on = i === index;
+          tab.setAttribute('aria-selected', String(on));
+          tab.tabIndex = on ? 0 : -1;
+          document.getElementById(tab.getAttribute('aria-controls')).hidden = !on;
+        });
+      }
+    });
+  }
+</script>
+
+
+{% schema %}
+{
+  "name": "Product tabs",
+  "tag": "section",
+  "class": "section section-product-tabs",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "label", "label": "Name for screen readers", "default": "Product information" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Colour scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 28 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 28 }
+  ],
+  "blocks": [
+    {
+      "type": "details", "name": "Product details", "limit": 1,
+      "settings": [
+        { "type": "paragraph", "content": "Reads the Material, Finish, Capacity, Dimensions and Story metafields of each product." },
+        { "type": "text", "id": "title", "label": "Tab title", "default": "Details" },
+        { "type": "text", "id": "material_label", "label": "Material label", "default": "Material" },
+        { "type": "text", "id": "finish_label", "label": "Finish label", "default": "Finish" },
+        { "type": "text", "id": "capacity_label", "label": "Capacity label", "default": "Capacity" },
+        { "type": "text", "id": "dimensions_label", "label": "Dimensions label", "default": "Dimensions (approx.)" },
+        { "type": "text", "id": "story_heading", "label": "Story heading", "default": "The story behind it" },
+        { "type": "checkbox", "id": "show_image", "label": "Show story image", "default": true }
+      ]
+    },
+    {
+      "type": "content", "name": "Text tab",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Tab title", "default": "Care & use" },
+        { "type": "richtext", "id": "content", "label": "Content" },
+        { "type": "page", "id": "page", "label": "Also show content from a page", "info": "Handy for shipping or returns text you keep on a policy page." }
+      ]
+    },
+    {
+      "type": "description", "name": "Description", "limit": 1,
+      "settings": [ { "type": "text", "id": "title", "label": "Tab title", "default": "Description" } ]
+    }
+  ],
+  "presets": [ { "name": "Product tabs", "blocks": [ { "type": "details" }, { "type": "content" } ] } ]
+}
+{% endschema %}

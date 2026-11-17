@@ -1,0 +1,52 @@
+{%- doc -%}
+  Shows estimated delivery dates for each shipping region on the product page.
+
+  @param {object} block - The delivery estimate block.
+  @param {object} product - The product being shown.
+{%- enddoc -%}
+
+{%- liquid
+  assign ships = false
+  for variant in product.variants
+    if variant.requires_shipping
+      assign ships = true
+      break
+    endif
+  endfor
+-%}
+
+{%- if ships -%}
+  <delivery-estimate
+    class="delivery-estimate"
+    data-dispatch="{{ block.settings.dispatch_days }}"
+    data-cutoff="{{ block.settings.cutoff_hour }}"
+    {{ block.shopify_attributes }}
+  >
+    <p class="delivery-estimate__heading">
+      {%- render 'line-icon', name: 'truck' -%}
+      <span>{{ block.settings.heading }}</span>
+    </p>
+    <ul class="delivery-estimate__list" role="list">
+      {%- for i in (1..3) -%}
+        {%- liquid
+          assign label_key = 'region_' | append: i
+          assign min_key = 'region_' | append: i | append: '_min'
+          assign max_key = 'region_' | append: i | append: '_max'
+          assign label = block.settings[label_key]
+          assign min_days = block.settings[min_key]
+          assign max_days = block.settings[max_key]
+        -%}
+        {%- if label != blank -%}
+          <li class="delivery-estimate__row" data-min="{{ min_days }}" data-max="{{ max_days }}">
+            <span class="delivery-estimate__region">{{ label }}</span>
+            <span class="delivery-estimate__date" data-date>{{ min_days }}–{{ max_days }} working days</span>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+    {%- if block.settings.note != blank -%}
+      <p class="delivery-estimate__note">{{ block.settings.note }}</p>
+    {%- endif -%}
+  </delivery-estimate>
+  <script src="{{ 'delivery-estimate.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}

@@ -1,0 +1,22 @@
+{%- doc -%}
+  Extra fonts, design tokens and the studio stylesheet. Rendered in the layout head after base.css.
+{%- enddoc -%}
+{%- liquid
+  assign heading_italic = settings.type_header_font | font_modify: 'style', 'italic'
+  assign heading_bold = settings.type_header_font | font_modify: 'weight', '+100'
+-%}
+{% style %}
+  {% if heading_italic %}{{ heading_italic | font_face: font_display: 'swap' }}{% endif %}
+  {% if heading_bold %}{{ heading_bold | font_face: font_display: 'swap' }}{% endif %}
+  :root {
+    --kc-ornament: {{ settings.ornament_color }};
+    --kc-forest: 47, 58, 32;
+    --kc-clay: 122, 58, 18;
+    --kc-ink: 43, 29, 20;
+    --kc-sand: 245, 234, 220;
+    --kc-line: rgba(43, 29, 20, 0.12);
+    --kc-radius: 1.4rem;
+    --kc-radius-lg: 2rem;
+  }
+{% endstyle %}
+{{ 'brand.css' | asset_url | stylesheet_tag }}

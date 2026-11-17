@@ -1,0 +1,16 @@
+.maker-profile__hero { display: grid; gap: 4rem; align-items: center; margin-bottom: 6rem; }
+.maker-profile__portrait { border-radius: var(--kc-radius-lg); overflow: hidden; aspect-ratio: 4 / 5; background: rgba(var(--kc-sand), 1); display: grid; place-items: center; }
+.maker-profile__portrait img { width: 100%; height: 100%; object-fit: cover; }
+.maker-profile__portrait .kolam-ornament { width: 40%; }
+.maker-profile__name { font-size: clamp(4rem, 5vw, 6.4rem); margin: 0 0 0.8rem; }
+.maker-profile__since { margin: 0 0 2.4rem; color: rgb(var(--kc-clay)); font-size: 1.5rem; }
+.maker-profile__bio { font-size: 1.65rem; line-height: 1.7; max-width: 58ch; }
+.maker-profile__tags { list-style: none; padding: 0; margin: 2.4rem 0; display: flex; flex-wrap: wrap; gap: 0.8rem; }
+.maker-profile__tags li { padding: 0.6rem 1.4rem; border-radius: 4rem; background: #F3DCC2; font-size: 1.35rem; }
+.maker-profile__quote { margin: 0; padding-left: 2rem; border-left: 2px solid var(--kc-ornament); }
+.maker-profile__quote blockquote { margin: 0; font-family: var(--font-heading-family); font-style: italic; font-size: 2.2rem; line-height: 1.4; }
+.maker-profile__quote p { margin: 0; }
+.maker-profile__works .grid { margin: 0; padding: 0; }
+@media screen and (min-width: 990px) {
+  .maker-profile__hero { grid-template-columns: 0.8fr 1.2fr; gap: 7.2rem; }
+}

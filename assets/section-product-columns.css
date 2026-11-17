@@ -1,0 +1,13 @@
+.product-columns__grid { display: grid; gap: 4rem; }
+.product-columns__col { min-width: 0; }
+.product-columns__list { margin: 0; padding: 0; list-style: none; }
+.product-columns .card__heading { font-size: 1.4rem; }
+@media screen and (min-width: 990px) {
+  .product-columns__grid--2 { grid-template-columns: 1fr 1fr; gap: 0; }
+  .product-columns__grid--2 .product-columns__col:first-child { padding-right: 3.2rem; border-right: 1px solid var(--kc-line); }
+  .product-columns__grid--2 .product-columns__col:last-child { padding-left: 3.2rem; }
+}
+@media screen and (max-width: 749px) {
+  .product-columns__list.grid { overflow-x: auto; flex-wrap: nowrap; scroll-snap-type: x mandatory; padding-bottom: 0.8rem; }
+  .product-columns__list .grid__item { flex: 0 0 44%; max-width: 44%; scroll-snap-align: start; }
+}

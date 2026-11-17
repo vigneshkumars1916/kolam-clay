@@ -1,0 +1,56 @@
+{%- doc -%}
+  One schema.org Event per bookable session, with seats remaining, so search engines and
+  AI assistants can answer "when is the next pottery class at Kolam & Clay?".
+
+  @param {product} product - The workshop product
+  @param {number} max_seats - Seats per session
+{%- enddoc -%}
+{%- liquid
+  assign maker = product.metafields.custom.maker.value
+  assign org_id = request.origin | append: '/#organization'
+-%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {%- for variant in product.variants -%}
+      {%- assign start = variant.metafields.custom.session_start.value -%}
+      {%- assign finish = variant.metafields.custom.session_end.value -%}
+      {
+        "@type": "Event",
+        "name": {{ product.title | append: ' – ' | append: variant.option1 | append: ', ' | append: variant.option2 | json }},
+        "description": {{ product.description | strip_html | strip_newlines | truncate: 300 | json }},
+        "startDate": {{ start | date: '%Y-%m-%dT%H:%M:%S%z' | json }},
+        {%- if finish %}"endDate": {{ finish | date: '%Y-%m-%dT%H:%M:%S%z' | json }},{% endif %}
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "maximumAttendeeCapacity": {{ max_seats | default: 8 }},
+        "remainingAttendeeCapacity": {{ variant.inventory_quantity | at_least: 0 }},
+        "url": {{ request.origin | append: variant.url | json }},
+        {%- if product.featured_image %}"image": [{{ product.featured_image | image_url: width: 1200 | prepend: 'https:' | json }}],{% endif %}
+        "location": {
+          "@type": "Place",
+          "name": {{ shop.name | append: ' studio' | json }},
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": {{ settings.studio_street | json }},
+            "addressLocality": {{ settings.studio_locality | json }},
+            "addressRegion": {{ settings.studio_region | json }},
+            "postalCode": {{ settings.studio_postcode | json }},
+            "addressCountry": "IN"
+          }
+        },
+        "organizer": { "@type": "Organization", "@id": {{ org_id | json }}, "name": {{ shop.name | json }}, "url": {{ request.origin | json }} },
+        {%- if maker %}"performer": { "@type": "Person", "name": {{ maker.name.value | json }}, "url": {{ request.origin | append: maker.system.url | json }} },{% endif %}
+        "offers": {
+          "@type": "Offer",
+          "price": {{ variant.price | money_without_currency | remove: ',' | json }},
+          "priceCurrency": {{ cart.currency.iso_code | json }},
+          "availability": "{% if variant.available %}https://schema.org/InStock{% else %}https://schema.org/SoldOut{% endif %}",
+          "url": {{ request.origin | append: variant.url | json }}
+        }
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+}
+</script>

@@ -205,7 +205,7 @@
 
                               {%- for property in item.properties -%}
                                 {%- assign property_first_char = property.first | slice: 0 -%}
-                                {%- if property.last != blank and property_first_char != '_' -%}
+                                {%- if property.last != blank and property_first_char != '_' and property.first != 'Gift note' -%}
                                   <div class="product-option">
                                     <dt>{{ property.first }}:</dt>
                                     <dd>
@@ -514,6 +514,7 @@
         <div class="cart-drawer__footer" {{ block.shopify_attributes }}>
           <div>
             {%- if cart.cart_level_discount_applications.size > 0 -%}
+                          {%- render 'gift-note-field', item: item, line: forloop.index -%}
               <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
                 {%- for discount in cart.cart_level_discount_applications -%}
                   <li class="discounts__discount discounts__discount--end">
@@ -574,6 +575,7 @@
 
         <!-- CTAs -->
 
+            {%- if settings.cc_enable -%}<p class="cc-note caption" data-cc-note hidden>{{ settings.cc_checkout_note | escape }}</p>{%- endif -%}
         <div class="cart__ctas" {{ block.shopify_attributes }}>
           <button
             type="submit"

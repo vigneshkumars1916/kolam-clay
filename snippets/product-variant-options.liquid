@@ -9,6 +9,7 @@
   @example
   {% render 'product-variant-options', option: option, block: block, picker_type: 'button' %}
 {%- enddoc -%}
+{%- capture is_glaze -%}{%- render 'is-glaze-option', option_name: option.name -%}{%- endcapture -%}
 {%- liquid
   assign product_form_id = 'product-form-' | append: section.id
 -%}
@@ -88,8 +89,8 @@
       {% endif %}
       {{ input_dataset }}
     >
-    <label for="{{ input_id }}">
-      {{ value -}}
+    <label for="{{ input_id }}"{% if is_glaze == 'true' %} style="--swatch: {% render 'glaze-color', name: value %};" title="{{ escaped_value }}"{% endif %}>
+      <span class="kc-opt-text">{{ value }}</span>
       {{ label_unavailable }}
     </label>
   {%- elsif picker_type == 'dropdown' or picker_type == 'swatch_dropdown' -%}

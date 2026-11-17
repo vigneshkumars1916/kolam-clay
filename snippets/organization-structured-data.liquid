@@ -1,0 +1,58 @@
+{%- doc -%}
+  Sitewide organisation data: who the studio is, where it is, who founded it and where it ships.
+  Gives search engines and AI assistants one consistent description to cite.
+{%- enddoc -%}
+{%- liquid
+  assign socials = settings.social_instagram_link | append: '|' | append: settings.social_youtube_link | append: '|' | append: settings.social_pinterest_link | append: '|' | append: settings.social_facebook_link | split: '|'
+-%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["Organization", "Store"],
+  "@id": {{ request.origin | append: '/#organization' | json }},
+  "name": {{ shop.name | json }},
+  "url": {{ request.origin | json }},
+  {%- if settings.logo %}"logo": {{ settings.logo | image_url: width: 500 | prepend: 'https:' | json }},{% endif %}
+  "description": {{ shop.description | default: settings.brand_description | strip_html | json }},
+  "foundingDate": {{ settings.studio_founded | json }},
+  "telephone": {{ settings.studio_phone | json }},
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": {{ settings.studio_street | json }},
+    "addressLocality": {{ settings.studio_locality | json }},
+    "addressRegion": {{ settings.studio_region | json }},
+    "postalCode": {{ settings.studio_postcode | json }},
+    "addressCountry": "IN"
+  },
+  "founder": [
+    {%- for maker in shop.metaobjects.potter.values -%}
+      { "@type": "Person", "name": {{ maker.name.value | json }}, "jobTitle": {{ maker.role.value | json }}, "url": {{ request.origin | append: maker.system.url | json }} }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ],
+  "areaServed": ["IN", "AE", "US"],
+  "knowsAbout": ["Handmade pottery", "Stoneware", "Kolam patterns", "Pottery workshops in Chennai"],
+  "sameAs": [
+    {%- assign first = true -%}
+    {%- for link in socials -%}
+      {%- if link != blank -%}{% unless first %},{% endunless %}{{ link | json }}{%- assign first = false -%}{%- endif -%}
+    {%- endfor -%}
+  ]
+}
+</script>
+{%- if request.page_type == 'index' -%}
+{%- assign search_target = request.origin | append: routes.search_url | append: '?q={search_term_string}' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": {{ shop.name | json }},
+  "url": {{ request.origin | json }},
+  "publisher": { "@id": {{ request.origin | append: '/#organization' | json }} },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {{ search_target | json }},
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{%- endif -%}

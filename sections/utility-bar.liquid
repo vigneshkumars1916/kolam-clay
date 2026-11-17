@@ -1,0 +1,50 @@
+{{ 'section-utility-bar.css' | asset_url | stylesheet_tag }}
+<div class="utility-bar color-{{ section.settings.color_scheme }} gradient">
+  <div class="utility-bar__inner page-width">
+    <p class="utility-bar__message">
+      {%- if section.settings.icon != 'none' -%}{%- render 'line-icon', name: section.settings.icon -%}{%- endif -%}
+      {%- if section.settings.link != blank -%}
+        <a href="{{ section.settings.link }}">{{ section.settings.message }}</a>
+      {%- else -%}
+        <span>{{ section.settings.message }}</span>
+      {%- endif -%}
+    </p>
+    <div class="utility-bar__end">
+      {%- assign menu = linklists[section.settings.menu] -%}
+      {%- if menu.links.size > 0 -%}
+        <nav class="utility-bar__nav" aria-label="{{ section.settings.menu_label | escape }}">
+          <ul role="list">
+            {%- for link in menu.links -%}
+              <li><a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+      {%- if section.settings.show_social -%}
+        {%- render 'social-icons', class: 'utility-bar__social' -%}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Utility bar",
+  "tag": "div",
+  "class": "section-utility-bar",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    { "type": "text", "id": "message", "label": "Message", "default": "Free shipping across India on orders above ₹1,499" },
+    { "type": "url", "id": "link", "label": "Message link" },
+    { "type": "select", "id": "icon", "label": "Message icon", "default": "truck", "options": [
+      { "value": "none", "label": "None" }, { "value": "truck", "label": "Delivery truck" }, { "value": "gift", "label": "Gift" }, { "value": "calendar", "label": "Calendar" }, { "value": "heart", "label": "Heart" }
+    ] },
+    { "type": "link_list", "id": "menu", "label": "Links on the right" },
+    { "type": "text", "id": "menu_label", "label": "Menu name for screen readers", "default": "Studio links" },
+    { "type": "checkbox", "id": "show_social", "label": "Show social icons", "default": true, "info": "Links come from Theme settings → Social media." },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Colour scheme", "default": "scheme-3" }
+  ],
+  "presets": [ { "name": "Utility bar" } ]
+}
+{% endschema %}

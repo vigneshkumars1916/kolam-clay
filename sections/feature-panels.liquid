@@ -1,0 +1,720 @@
+{{ 'section-feature-panels.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  A row of one to three panels. Each panel is a block, so the same section can show
+  "Glaze palette + Workshop", "Craft process + Reviews" or "Gift guide + FAQ",
+  and the founders can mix them however they like.
+{%- endcomment -%}
+{%- assign faq_entries = '' -%}
+
+<div class="feature-panels color-{{ section.settings.color_scheme }} gradient kc-section" style="--kc-pt: {{ section.settings.padding_top }}px; --kc-pb: {{ section.settings.padding_bottom }}px;">
+  <div class="page-width feature-panels__row feature-panels__row--{{ section.settings.split }}">
+    {%- for block in section.blocks -%}
+      <div class="feature-panel feature-panel--{{ block.type }} color-{{ block.settings.color_scheme }} gradient" {{ block.shopify_attributes }}>
+        {%- case block.type -%}
+
+          {%- when 'glaze_palette' -%}
+            {%- if block.settings.image != blank -%}
+              <div class="feature-panel__side-image" aria-hidden="true">
+                {{ block.settings.image | image_url: width: 500 | image_tag: loading: 'lazy', alt: '' }}
+              </div>
+            {%- endif -%}
+            <div class="feature-panel__body">
+              <h2 class="feature-panel__title h3">{{ block.settings.heading }}</h2>
+              {%- if block.settings.text != blank -%}<div class="feature-panel__text kc-rte">{{ block.settings.text }}</div>{%- endif -%}
+              {%- liquid
+                assign lines = settings.glaze_swatches | newline_to_br | split: '<br />'
+                assign base_url = block.settings.collection.url | default: routes.all_products_collection_url
+                assign option_param = block.settings.filter_option | default: 'Glaze' | downcase
+              -%}
+              <ul class="glaze-palette" role="list">
+                {%- for line in lines -%}
+                  {%- assign pair = line | strip | split: ':' -%}
+                  {%- if pair.size > 1 -%}
+                    {%- assign glaze_name = pair.first | strip -%}
+                    <li>
+                      <a href="{{ base_url }}?filter.v.option.{{ option_param }}={{ glaze_name | url_encode }}" class="glaze-palette__item">
+                        <span class="glaze-palette__swatch" style="--swatch: {{ pair.last | strip }};"></span>
+                        <span class="glaze-palette__name">{{ glaze_name | replace: ' ', '<br>' }}</span>
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+
+          {%- when 'workshop' -%}
+            {%- liquid
+              assign ws = block.settings.product
+              assign next_session = nil
+              if ws != blank
+                for v in ws.variants
+                  if v.available
+                    assign next_session = v
+                    break
+                  endif
+                endfor
+              endif
+            -%}
+            {%- if block.settings.image != blank -%}
+              <div class="feature-panel__bg">
+                {{ block.settings.image | image_url: width: 900 | image_tag: widths: '450, 700, 900', sizes: '(min-width: 990px) 50vw, 100vw', loading: 'lazy', alt: block.settings.image.alt }}
+              </div>
+            {%- endif -%}
+            <div class="feature-panel__body feature-panel__body--over">
+              {%- if block.settings.badge != blank -%}
+                <span class="feature-panel__badge">{%- render 'line-icon', name: 'vase' -%}{{ block.settings.badge }}</span>
+              {%- endif -%}
+              <h2 class="feature-panel__title h2">{{ block.settings.heading }}</h2>
+              {%- if block.settings.text != blank -%}<div class="feature-panel__text kc-rte">{{ block.settings.text }}</div>{%- endif -%}
+              <div class="feature-panel__meta">
+                {%- if next_session -%}
+                  <span>{%- render 'line-icon', name: 'calendar' -%}{{ next_session.title | split: ' / ' | first }}</span>
+                  {%- if next_session.inventory_management == 'shopify' -%}
+                    <span>{%- render 'line-icon', name: 'users' -%}{{ block.settings.seats_label | replace: '[seats]', next_session.inventory_quantity }}</span>
+                  {%- endif -%}
+                {%- elsif ws != blank -%}
+                  <span>{{ block.settings.full_label }}</span>
+                {%- endif -%}
+                {%- if block.settings.button_label != blank -%}
+                  <a class="button button--small feature-panel__cta" href="{{ ws.url | default: block.settings.link | default: '#' }}">
+                    {{- block.settings.button_label -}}{%- render 'line-icon', name: 'arrow' -%}
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+
+          {%- when 'process' -%}
+            <div class="feature-panel__body">
+              <h2 class="feature-panel__title h3">{{ block.settings.heading }}</h2>
+              {%- if block.settings.text != blank -%}<p class="feature-panel__lead">{{ block.settings.text }}</p>{%- endif -%}
+              <ol class="process-steps" role="list">
+                {%- for i in (1..6) -%}
+                  {%- assign label_key = 'step_' | append: i | append: '_label' -%}
+                  {%- assign image_key = 'step_' | append: i | append: '_image' -%}
+                  {%- if block.settings[label_key] != blank -%}
+                    <li class="process-steps__item">
+                      <span class="process-steps__media">
+                        {%- if block.settings[image_key] != blank -%}
+                          {{ block.settings[image_key] | image_url: width: 200 | image_tag: loading: 'lazy', width: 100, height: 100, alt: '' }}
+                        {%- endif -%}
+                      </span>
+                      <span class="process-steps__label">{{ forloop.index }}. {{ block.settings[label_key] }}</span>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ol>
+            </div>
+
+          {%- when 'testimonials' -%}
+            <testimonial-rotator class="feature-panel__body testimonials">
+              <h2 class="feature-panel__title h3">{{ block.settings.heading }}</h2>
+              <div class="testimonials__viewport">
+                {%- assign quote_total = 0 -%}
+                {%- for i in (1..3) -%}
+                  {%- assign q_key = 'quote_' | append: i -%}
+                  {%- if block.settings[q_key] != blank -%}{%- assign quote_total = quote_total | plus: 1 -%}{%- endif -%}
+                {%- endfor -%}
+                {%- for i in (1..3) -%}
+                  {%- liquid
+                    assign q_key = 'quote_' | append: i
+                    assign n_key = 'name_' | append: i
+                    assign img_key = 'image_' | append: i
+                  -%}
+                  {%- if block.settings[q_key] != blank -%}
+                    <figure class="testimonials__slide{% if forloop.first %} is-active{% endif %}" data-slide {% unless forloop.first %}hidden{% endunless %}>
+                      <div class="testimonials__copy">
+                        <blockquote><p>“{{ block.settings[q_key] }}”</p></blockquote>
+                        <figcaption>— {{ block.settings[n_key] }}</figcaption>
+                      </div>
+                      {%- if block.settings[img_key] != blank -%}
+                        <div class="testimonials__photo">
+                          {{ block.settings[img_key] | image_url: width: 400 | image_tag: loading: 'lazy', alt: block.settings[img_key].alt }}
+                        </div>
+                      {%- endif -%}
+                    </figure>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              {%- if quote_total > 1 -%}
+                <div class="testimonials__nav">
+                  <button type="button" class="testimonials__btn" data-prev aria-label="{{ 'general.slider.previous_slide' | t }}">{%- render 'line-icon', name: 'arrow', class: 'is-flipped' -%}</button>
+                  <button type="button" class="testimonials__btn" data-next aria-label="{{ 'general.slider.next_slide' | t }}">{%- render 'line-icon', name: 'arrow' -%}</button>
+                </div>
+              {%- endif -%}
+            </testimonial-rotator>
+
+          {%- when 'gift_guide' -%}
+            <div class="feature-panel__body feature-panel__body--split">
+              <div>
+                <h2 class="feature-panel__title h3 feature-panel__title--icon">{%- render 'line-icon', name: 'gift' -%}{{ block.settings.heading }}</h2>
+                {%- if block.settings.text != blank -%}<div class="feature-panel__text kc-rte">{{ block.settings.text }}</div>{%- endif -%}
+                {%- if block.settings.button_label != blank -%}
+                  <a class="button button--clay button--small" href="{{ block.settings.link | default: '#' }}">{{ block.settings.button_label }}{%- render 'line-icon', name: 'arrow' -%}</a>
+                {%- endif -%}
+              </div>
+              {%- if block.settings.image != blank -%}
+                <div class="feature-panel__image">
+                  {{ block.settings.image | image_url: width: 700 | image_tag: widths: '350, 520, 700', sizes: '(min-width: 990px) 28vw, 60vw', loading: 'lazy', alt: block.settings.image.alt }}
+                </div>
+              {%- endif -%}
+            </div>
+
+          {%- when 'faq' -%}
+            <div class="feature-panel__body feature-panel__body--split feature-panel__body--faq">
+              <div>
+                <h2 class="feature-panel__title h3 feature-panel__title--icon">{%- render 'line-icon', name: 'chat' -%}{{ block.settings.heading }}</h2>
+                {%- if block.settings.text != blank -%}<div class="feature-panel__text kc-rte">{{ block.settings.text }}</div>{%- endif -%}
+                {%- if block.settings.button_label != blank -%}
+                  <a class="button button--clay button--small" href="{{ block.settings.link | default: '#' }}">{{ block.settings.button_label }}{%- render 'line-icon', name: 'arrow' -%}</a>
+                {%- endif -%}
+              </div>
+              <div class="faq-list">
+                {%- for i in (1..5) -%}
+                  {%- assign q_key = 'question_' | append: i -%}
+                  {%- assign a_key = 'answer_' | append: i -%}
+                  {%- if block.settings[q_key] != blank -%}
+                    <details class="faq-list__item">
+                      <summary>{{ block.settings[q_key] }}<span class="faq-list__icon" aria-hidden="true"></span></summary>
+                      <div class="faq-list__answer kc-rte">{{ block.settings[a_key] }}</div>
+                    </details>
+                    {%- capture faq_entry -%}{"@type":"Question","name":{{ block.settings[q_key] | json }},"acceptedAnswer":{"@type":"Answer","text":{{ block.settings[a_key] | strip_html | json }}}}{%- endcapture -%}
+                    {%- if faq_entries != '' -%}{%- assign faq_entries = faq_entries | append: ',' -%}{%- endif -%}
+                    {%- assign faq_entries = faq_entries | append: faq_entry -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+        {%- endcase -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{%- if faq_entries != '' -%}
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{{ faq_entries }}]}</script>
+{%- endif -%}
+
+<script>
+  if (!customElements.get('testimonial-rotator')) {
+    customElements.define('testimonial-rotator', class extends HTMLElement {
+      connectedCallback() {
+        this.slides = [...this.querySelectorAll('[data-slide]')];
+        this.i = 0;
+        this.querySelector('[data-prev]')?.addEventListener('click', () => this.show(this.i - 1));
+        this.querySelector('[data-next]')?.addEventListener('click', () => this.show(this.i + 1));
+      }
+      show(n) {
+        this.i = (n + this.slides.length) % this.slides.length;
+        this.slides.forEach((s, idx) => { s.hidden = idx !== this.i; s.classList.toggle('is-active', idx === this.i); });
+      }
+    });
+  }
+</script>
+
+
+{%- unless section.settings.leaves == 'none' or section.settings.leaves == blank -%}
+  {%- assign leaf_class = 'leaf-sprig--' | append: section.settings.leaves -%}
+  {%- render 'leaf-sprig', class: leaf_class -%}
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Feature panels",
+  "tag": "section",
+  "class": "section section-feature-panels",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "select",
+      "id": "split",
+      "label": "Panel widths",
+      "default": "equal",
+      "options": [
+        {
+          "value": "equal",
+          "label": "Equal"
+        },
+        {
+          "value": "wide-left",
+          "label": "Wider left"
+        },
+        {
+          "value": "wide-right",
+          "label": "Wider right"
+        },
+        {
+          "value": "full",
+          "label": "Stacked, full width"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Section colour scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "leaves",
+      "label": "Leaf decoration",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "glaze_palette",
+      "name": "Glaze palette",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Glazes and their colours come from Theme settings → Studio & brand."
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Choose your glaze"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Four glazes we mix ourselves. Each one breaks a little differently over the clay, so no two pieces match exactly.</p>"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection the swatches link to"
+        },
+        {
+          "type": "text",
+          "id": "filter_option",
+          "label": "Filter option name",
+          "default": "Glaze"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Side image"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Colour scheme",
+          "default": "scheme-2"
+        }
+      ]
+    },
+    {
+      "type": "workshop",
+      "name": "Workshop promo",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Workshop product",
+          "info": "The next session with seats is shown automatically."
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge",
+          "default": "Pottery workshops"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Get your hands in the clay"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Two and a half hours on the wheel at our Adyar studio. Beginners welcome.</p>"
+        },
+        {
+          "type": "text",
+          "id": "seats_label",
+          "label": "Seats label",
+          "default": "[seats] seats left",
+          "info": "[seats] is replaced with the number left."
+        },
+        {
+          "type": "text",
+          "id": "full_label",
+          "label": "Text when every date is full",
+          "default": "New dates coming soon"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Book your spot"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Button link if no product is chosen"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Colour scheme",
+          "default": "scheme-3"
+        }
+      ]
+    },
+    {
+      "type": "process",
+      "name": "Craft process",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Our craft process"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "From a lump of clay to your kitchen shelf."
+        },
+        {
+          "type": "text",
+          "id": "step_1_label",
+          "label": "Step 1",
+          "default": "Shape"
+        },
+        {
+          "type": "image_picker",
+          "id": "step_1_image",
+          "label": "Step 1 image"
+        },
+        {
+          "type": "text",
+          "id": "step_2_label",
+          "label": "Step 2",
+          "default": "Dry"
+        },
+        {
+          "type": "image_picker",
+          "id": "step_2_image",
+          "label": "Step 2 image"
+        },
+        {
+          "type": "text",
+          "id": "step_3_label",
+          "label": "Step 3",
+          "default": "Fire"
+        },
+        {
+          "type": "image_picker",
+          "id": "step_3_image",
+          "label": "Step 3 image"
+        },
+        {
+          "type": "text",
+          "id": "step_4_label",
+          "label": "Step 4",
+          "default": "Glaze"
+        },
+        {
+          "type": "image_picker",
+          "id": "step_4_image",
+          "label": "Step 4 image"
+        },
+        {
+          "type": "text",
+          "id": "step_5_label",
+          "label": "Step 5",
+          "default": "Finish"
+        },
+        {
+          "type": "image_picker",
+          "id": "step_5_image",
+          "label": "Step 5 image"
+        },
+        {
+          "type": "text",
+          "id": "step_6_label",
+          "label": "Step 6"
+        },
+        {
+          "type": "image_picker",
+          "id": "step_6_image",
+          "label": "Step 6 image"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Colour scheme",
+          "default": "scheme-1"
+        }
+      ]
+    },
+    {
+      "type": "testimonials",
+      "name": "Customer words",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Customer reviews"
+        },
+        {
+          "type": "textarea",
+          "id": "quote_1",
+          "label": "Quote 1"
+        },
+        {
+          "type": "text",
+          "id": "name_1",
+          "label": "Name 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Photo 1"
+        },
+        {
+          "type": "textarea",
+          "id": "quote_2",
+          "label": "Quote 2"
+        },
+        {
+          "type": "text",
+          "id": "name_2",
+          "label": "Name 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Photo 2"
+        },
+        {
+          "type": "textarea",
+          "id": "quote_3",
+          "label": "Quote 3"
+        },
+        {
+          "type": "text",
+          "id": "name_3",
+          "label": "Name 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "Photo 3"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Colour scheme",
+          "default": "scheme-1"
+        }
+      ]
+    },
+    {
+      "type": "gift_guide",
+      "name": "Gift guide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Gift guide"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Thoughtful pottery gifts, packed by hand with a note in your words.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Explore gift sets"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Button link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Colour scheme",
+          "default": "scheme-5"
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Questions here are also published as FAQ structured data for search engines."
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "FAQs"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Quick answers before you shop or book.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "View all FAQs"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Button link"
+        },
+        {
+          "type": "text",
+          "id": "question_1",
+          "label": "Question 1",
+          "default": "Where do you ship?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_1",
+          "label": "Answer 1",
+          "default": "<p>Across India and to the UAE and US. Orders in India over ₹1,499 ship free.</p>"
+        },
+        {
+          "type": "text",
+          "id": "question_2",
+          "label": "Question 2",
+          "default": "Do you take returns?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_2",
+          "label": "Answer 2",
+          "default": "<p>Yes, within 7 days of delivery for unused pieces. Workshop seats can be moved to another date up to 48 hours before.</p>"
+        },
+        {
+          "type": "text",
+          "id": "question_3",
+          "label": "Question 3",
+          "default": "How should I care for my pottery?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_3",
+          "label": "Answer 3",
+          "default": "<p>Our stoneware is food safe, microwave safe and dishwasher safe. Avoid sudden temperature changes, like moving a cold mug straight onto a hot stove.</p>"
+        },
+        {
+          "type": "text",
+          "id": "question_4",
+          "label": "Question 4",
+          "default": "Can I book a workshop for a group?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_4",
+          "label": "Answer 4",
+          "default": "<p>Yes. We host private sessions for 6 to 12 people. Write to us with a date and we'll plan it with you.</p>"
+        },
+        {
+          "type": "text",
+          "id": "question_5",
+          "label": "Question 5"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_5",
+          "label": "Answer 5"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Colour scheme",
+          "default": "scheme-2"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Feature panels",
+      "blocks": [
+        {
+          "type": "glaze_palette"
+        },
+        {
+          "type": "workshop"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

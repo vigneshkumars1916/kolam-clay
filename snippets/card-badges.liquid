@@ -1,0 +1,31 @@
+{%- doc -%}
+  Studio badges on product cards: one-of-a-kind state, workshop label, or the product's Card badge metafield.
+
+  @param {product} card_product - Product shown in the card
+{%- enddoc -%}
+{%- liquid
+  assign label = blank
+  assign tone = 'sand'
+  if card_product.metafields.custom.one_of_a_kind.value
+    if card_product.available
+      assign label = settings.ooak_badge
+      assign tone = 'amber'
+    else
+      assign label = settings.ooak_sold_badge
+      assign tone = 'forest'
+    endif
+  elsif card_product.type == 'Workshop'
+    assign label = 'Workshop'
+  elsif card_product.metafields.custom.badge != blank
+    assign label = card_product.metafields.custom.badge.value
+    assign key = label | downcase
+    if key contains 'best'
+      assign tone = 'forest'
+    elsif key contains 'new'
+      assign tone = 'amber'
+    endif
+  endif
+-%}
+{%- if label != blank -%}
+  <span class="badge badge--{{ tone }}">{{ label }}</span>
+{%- endif -%}

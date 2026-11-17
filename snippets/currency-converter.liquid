@@ -1,0 +1,37 @@
+{%- liquid
+  assign cc_codes = settings.cc_currencies | upcase | remove: ' ' | split: ','
+  if cc_codes.size == 0
+    assign cc_codes = shop.currency | split: ','
+  endif
+-%}
+<currency-converter class="cc header-currency" data-cc-skip>
+  <button
+    type="button"
+    class="cc__button"
+    aria-expanded="false"
+    aria-haspopup="listbox"
+    aria-controls="CurrencyList-{{ section.id }}"
+    data-label="Currency"
+  >
+    <span class="cc__symbol" data-cc-symbol>₹</span>
+    <span class="cc__code" data-cc-code>{{ cc_codes.first }}</span>
+    {{- 'icon-caret.svg' | inline_asset_content -}}
+  </button>
+  <ul class="cc__list" id="CurrencyList-{{ section.id }}" role="listbox" aria-label="Choose currency" hidden>
+    {%- for code in cc_codes -%}
+      <li class="cc__option" role="option" tabindex="-1" data-currency="{{ code }}" aria-selected="false">
+        <span class="cc__option-symbol" aria-hidden="true"></span>
+        <span class="cc__option-code">{{ code }}</span>
+        <span class="cc__option-name"></span>
+      </li>
+    {%- endfor -%}
+  </ul>
+  <script type="application/json" data-cc-config>
+    {
+      "base": {{ shop.currency | json }},
+      "currencies": {{ cc_codes | json }},
+      "live": {{ settings.cc_live_rates | json }},
+      "fallback": {{ settings.cc_fallback_rates | json }}
+    }
+  </script>
+</currency-converter>

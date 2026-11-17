@@ -1,0 +1,15 @@
+.makers-grid__head { margin-bottom: 4rem; }
+.makers-grid__head .kc-head__sub { max-width: 56ch; }
+.makers-grid__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 3.2rem; }
+.maker-card__link { display: grid; border-radius: var(--kc-radius-lg); overflow: hidden; background: rgba(var(--kc-sand), 1); color: inherit; text-decoration: none; height: 100%; }
+.maker-card__media { aspect-ratio: 4 / 3; overflow: hidden; display: grid; place-items: center; }
+.maker-card__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+.maker-card__media .kolam-ornament { width: 30%; }
+.maker-card__link:hover img { transform: scale(1.03); }
+.maker-card__body { display: flex; flex-direction: column; gap: 0.8rem; padding: 2.8rem 3.2rem 3.2rem; }
+.maker-card__role { color: rgb(var(--kc-clay)); font-size: 1.4rem; }
+.maker-card__name { margin: 0; }
+.maker-card__bio { font-size: 1.55rem; line-height: 1.6; color: rgba(var(--color-foreground), 0.82); margin-bottom: 0.8rem; }
+.maker-card__link:focus-visible { outline: 2px solid rgb(var(--kc-clay)); outline-offset: 4px; }
+@media screen and (min-width: 750px) { .makers-grid__list { grid-template-columns: repeat(2, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .maker-card__media img { transition: none; } }

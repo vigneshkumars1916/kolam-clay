@@ -1,0 +1,21 @@
+{%- doc -%}
+  Text logo used when no logo image is uploaded: a small pot emblem, the studio name and a tagline.
+
+  @param {string} [class] - Extra class names
+{%- enddoc -%}
+<span class="brand-wordmark {{ class }}">
+  {%- if settings.wordmark_emblem -%}
+    <svg class="brand-wordmark__emblem" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M24 9h16M26 9v6c-9 3-15 10-15 20 0 11 9 20 21 20s21-9 21-20c0-10-6-17-15-20V9"/>
+        <path d="M32 24l9 9-9 9-9-9z"/>
+        <path d="M32 18c3 0 5 2 5 5M32 18c-3 0-5 2-5 5M32 48c3 0 5-2 5-5M32 48c-3 0-5-2-5-5M18 33c0-3 2-5 5-5M18 33c0 3 2 5 5 5M46 33c0-3-2-5-5-5M46 33c0 3-2 5-5 5"/>
+      </g>
+      <g fill="currentColor"><circle cx="32" cy="33" r="1.8"/><circle cx="32" cy="27.5" r="1.1"/><circle cx="32" cy="38.5" r="1.1"/><circle cx="26.5" cy="33" r="1.1"/><circle cx="37.5" cy="33" r="1.1"/></g>
+    </svg>
+  {%- endif -%}
+  <span class="brand-wordmark__text">
+    <span class="brand-wordmark__name">{{ settings.wordmark_name | default: shop.name }}</span>
+    {%- if settings.wordmark_tagline != blank -%}<span class="brand-wordmark__tagline">{{ settings.wordmark_tagline }}</span>{%- endif -%}
+  </span>
+</span>

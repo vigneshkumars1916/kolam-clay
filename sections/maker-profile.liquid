@@ -1,0 +1,101 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'section-maker-profile.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign maker = metaobject
+  assign first_name = maker.name.value | split: ' ' | first
+  assign source = collections[section.settings.source_collection.handle] | default: collections.all
+-%}
+<div class="maker-profile color-{{ section.settings.color_scheme }} kc-section" style="--kc-pt: {{ section.settings.padding_top }}px; --kc-pb: {{ section.settings.padding_bottom }}px;">
+  <div class="page-width">
+    <div class="maker-profile__hero">
+      <div class="maker-profile__portrait">
+        {%- if maker.portrait != blank -%}
+          {{ maker.portrait.value | image_url: width: 900 | image_tag: widths: '400, 600, 900', sizes: '(min-width: 990px) 34vw, 100vw', loading: 'eager', alt: maker.name.value }}
+        {%- else -%}
+          {%- render 'kolam-ornament' -%}
+        {%- endif -%}
+      </div>
+      <div class="maker-profile__intro">
+        <p class="kc-eyebrow">{%- render 'kolam-ornament', variant: 'flourish' -%}<span>{{ maker.role.value }}</span></p>
+        <h1 class="maker-profile__name">{{ maker.name.value }}</h1>
+        {%- if maker.years_at_wheel != blank -%}
+          <p class="maker-profile__since">{{ section.settings.since_label | replace: '[year]', maker.years_at_wheel.value }}</p>
+        {%- endif -%}
+        {%- if maker.bio != blank -%}
+          <div class="maker-profile__bio rte">{{ maker.bio | metafield_tag }}</div>
+        {%- elsif maker.short_bio != blank -%}
+          <p class="maker-profile__bio">{{ maker.short_bio.value }}</p>
+        {%- endif -%}
+        {%- if maker.specialties != blank -%}
+          <ul class="maker-profile__tags" role="list" aria-label="{{ section.settings.specialties_label | escape }}">
+            {%- for item in maker.specialties.value -%}<li>{{ item }}</li>{%- endfor -%}
+          </ul>
+        {%- endif -%}
+        {%- if maker.quote != blank -%}
+          <figure class="maker-profile__quote"><blockquote><p>“{{ maker.quote.value }}”</p></blockquote></figure>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- capture works -%}
+      {%- paginate source.products by 250 -%}
+        {%- for product in source.products -%}
+          {%- if product.metafields.custom.maker.value.system.handle == maker.system.handle -%}
+            <li class="grid__item">
+              {%- render 'card-product', card_product: product, media_aspect_ratio: 'square', image_shape: 'default', show_secondary_image: false, show_vendor: false, show_rating: false, lazy_load: true, section_id: section.id -%}
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endpaginate -%}
+    {%- endcapture -%}
+
+    <div class="maker-profile__works">
+      <div class="kc-head">
+        <h2 class="kc-head__title h1">{{ section.settings.works_heading | replace: '[name]', first_name }}</h2>
+      </div>
+      {%- if works contains 'grid__item' -%}
+        <ul class="grid product-grid grid--4-col-desktop grid--2-col-tablet-down" role="list">{{ works }}</ul>
+      {%- else -%}
+        <p>{{ section.settings.empty_text }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "mainEntity": {
+    "@type": "Person",
+    "@id": {{ request.origin | append: maker.system.url | append: '#person' | json }},
+    "name": {{ maker.name.value | json }},
+    "jobTitle": {{ maker.role.value | json }},
+    "description": {{ maker.short_bio.value | json }},
+    {%- if maker.portrait != blank %}"image": {{ maker.portrait.value | image_url: width: 800 | prepend: 'https:' | json }},{% endif %}
+    {%- if maker.specialties != blank %}"knowsAbout": {{ maker.specialties.value | json }},{% endif %}
+    "worksFor": { "@type": "Organization", "@id": {{ request.origin | append: '/#organization' | json }}, "name": {{ shop.name | json }} },
+    "url": {{ request.origin | append: maker.system.url | json }}
+  }
+}
+</script>
+
+{% schema %}
+{
+  "name": "Potter profile",
+  "tag": "section",
+  "class": "section section-maker-profile",
+  "settings": [
+    { "type": "paragraph", "content": "Content comes from the potter entry in Content → Metaobjects → Potter." },
+    { "type": "text", "id": "since_label", "label": "Since label", "default": "At the wheel since [year]" },
+    { "type": "text", "id": "specialties_label", "label": "Specialties name for screen readers", "default": "Specialties" },
+    { "type": "text", "id": "works_heading", "label": "Works heading", "default": "Pieces by [name]", "info": "[name] is replaced with the potter's first name." },
+    { "type": "collection", "id": "source_collection", "label": "Look for pieces in", "info": "Leave blank to search every product." },
+    { "type": "text", "id": "empty_text", "label": "Text when no pieces are listed", "default": "New pieces are on the way. Check back soon." },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Colour scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 24 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 56 }
+  ]
+}
+{% endschema %}

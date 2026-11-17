@@ -1,0 +1,18 @@
+{%- doc -%}
+  Looks up the swatch colour for a glaze name from the "Glaze colours" theme setting.
+  Outputs a hex value, or nothing when the glaze isn't listed.
+
+  @param {string} name - Glaze option value, e.g. "Ocean Blue"
+{%- enddoc -%}
+{%- liquid
+  assign wanted = name | strip | downcase
+  assign lines = settings.glaze_swatches | newline_to_br | split: '<br />'
+  for line in lines
+    assign pair = line | strip | split: ':'
+    assign label = pair.first | strip | downcase
+    if label == wanted and pair.size > 1
+      echo pair.last | strip
+      break
+    endif
+  endfor
+-%}

@@ -1,0 +1,37 @@
+{%- doc -%}
+  Outline icon set used across the studio's custom sections.
+
+  @param {string} name - Icon key (see the case list below)
+  @param {string} [class] - Extra class names
+{%- enddoc -%}
+{%- capture paths -%}
+  {%- case name -%}
+    {%- when 'truck' -%}<path d="M3 6h11v9H3zM14 9h4l3 3v3h-7"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>
+    {%- when 'shield' -%}<path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/>
+    {%- when 'leaf' -%}<path d="M5 19C5 10 11 5 20 4c0 9-5 15-14 15z"/><path d="M5 19l8-8"/>
+    {%- when 'heart' -%}<path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/>
+    {%- when 'hand' -%}<path d="M8 12V5.5a1.5 1.5 0 013 0V11m0-1V4.5a1.5 1.5 0 013 0V11m0-.5V6a1.5 1.5 0 013 0v7c0 4-3 7-7 7-3 0-4.5-1.5-6-4l-2-3.5a1.5 1.5 0 012.6-1.5L8 13"/>
+    {%- when 'microwave' -%}<rect x="3" y="5" width="18" height="13" rx="2"/><rect x="6" y="8" width="9" height="7" rx="1"/><path d="M18 9v.01M18 12v.01M18 15v.01"/>
+    {%- when 'dishwasher' -%}<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 8h16M8 5.5v.01M11 5.5v.01"/><circle cx="12" cy="14" r="4"/>
+    {%- when 'sprout' -%}<path d="M12 21v-9M12 12c0-4-3-7-8-7 0 5 3 7 8 7zM12 14c0-4 3-7 8-7 0 5-3 7-8 7z"/>
+    {%- when 'pin' -%}<path d="M12 21s7-6.2 7-12a7 7 0 00-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>
+    {%- when 'users' -%}<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14c3 0 5 2.4 5 5.5"/>
+    {%- when 'clock' -%}<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>
+    {%- when 'level' -%}<path d="M5 20v-5M10 20V11M15 20V7M20 20V4"/>
+    {%- when 'box' -%}<path d="M3 7.5L12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5l9 4.5 9-4.5M12 12v9"/>
+    {%- when 'bookmark' -%}<path d="M7 3h10v18l-5-4-5 4z"/>
+    {%- when 'cup' -%}<path d="M5 8h11v6a5 5 0 01-5 5h-1a5 5 0 01-5-5z"/><path d="M16 10h1.5a2.5 2.5 0 010 5H16"/>
+    {%- when 'cloud' -%}<path d="M7 18a4 4 0 01-.5-8A5.5 5.5 0 0117 8.5 4.75 4.75 0 0117.5 18z"/>
+    {%- when 'calendar' -%}<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>
+    {%- when 'vase' -%}<path d="M9 3h6M10 3v3c-3 1.5-5 4-5 7.5C5 18 8 21 12 21s7-3 7-7.5C19 10 17 7.5 14 6V3"/>
+    {%- when 'layers' -%}<path d="M12 4l9 4.5-9 4.5-9-4.5z"/><path d="M3 12.5L12 17l9-4.5M3 16.5L12 21l9-4.5"/>
+    {%- when 'ruler' -%}<path d="M4 12h16M4 9v6M20 9v6M8 11v2M12 10.5v3M16 11v2"/>
+    {%- when 'gift' -%}<rect x="3.5" y="9" width="17" height="11" rx="1"/><path d="M2.5 6h19v3h-19zM12 6v14M12 6c-1-3-5-4-5-1s4 1 5 1zm0 0c1-3 5-4 5-1s-4 1-5 1z"/>
+    {%- when 'chat' -%}<path d="M4 5h16v11H9l-5 4z"/>
+    {%- when 'star' -%}<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8-5.2-2.8-5.2 2.8 1-5.8L3.5 9.7l5.9-.8z"/>
+    {%- when 'flame' -%}<path d="M12 21c-4 0-6.5-2.7-6.5-6.2 0-4.3 4-6 4-10.3 3 1.6 6 4.8 6 8.3.9-.6 1.5-1.8 1.5-3 1.4 1.4 1.5 3.4 1.5 5 0 3.5-2.5 6.2-6.5 6.2z"/>
+    {%- when 'arrow' -%}<path d="M5 12h14M13 6l6 6-6 6"/>
+    {%- else -%}<circle cx="12" cy="12" r="8"/>
+  {%- endcase -%}
+{%- endcapture -%}
+<svg class="line-icon {{ class }}" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">{{ paths }}</svg>

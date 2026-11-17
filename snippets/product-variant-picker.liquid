@@ -48,8 +48,9 @@
           %}
         </fieldset>
       {%- elsif picker_type == 'button' -%}
-        <fieldset class="js product-form__input product-form__input--pill">
-          <legend class="form__label">{{ option.name | escape }}</legend>
+        {%- capture is_glaze -%}{%- render 'is-glaze-option', option_name: option.name -%}{%- endcapture -%}
+        <fieldset class="js product-form__input product-form__input--pill{% if is_glaze == 'true' %} product-form__input--glaze{% endif %}">
+          <legend class="form__label">{{ option.name | escape }}{% if is_glaze == 'true' %}:<span class="kc-selected-value">{{ option.selected_value | escape }}</span>{% endif %}</legend>
           {% render 'product-variant-options',
             option: option,
             block: block,

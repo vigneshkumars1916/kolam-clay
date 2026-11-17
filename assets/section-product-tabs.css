@@ -1,0 +1,27 @@
+.product-tabs__list { display: flex; gap: 0.4rem; border-bottom: 1px solid var(--kc-line); overflow-x: auto; scrollbar-width: none; }
+.product-tabs__tab { flex: none; background: none; border: 0; padding: 1.4rem 2rem; font: inherit; font-size: 1.6rem; cursor: pointer; color: rgba(var(--color-foreground), 0.8); border-bottom: 3px solid transparent; margin-bottom: -1px; }
+.product-tabs__tab[aria-selected="true"] { color: rgb(var(--color-foreground)); font-weight: 600; border-bottom-color: rgb(var(--kc-clay)); }
+.product-tabs__tab:focus-visible { outline: 2px solid rgb(var(--kc-clay)); outline-offset: -2px; }
+.product-tabs__panel { padding-top: 2.8rem; }
+.product-tabs__panel:focus-visible { outline: 2px solid rgba(var(--kc-clay), 0.4); outline-offset: 4px; }
+.product-tabs__rte { max-width: 72ch; font-size: 1.55rem; line-height: 1.7; }
+.product-details { display: grid; gap: 3.2rem; align-items: center; }
+.product-details__specs { margin: 0; display: grid; gap: 1.8rem; }
+.product-details__row { display: flex; gap: 1.6rem; align-items: flex-start; }
+.product-details__row .line-icon { width: 3rem; height: 3rem; flex: none; stroke-width: 1.2; }
+.product-details__row dt { font-weight: 600; font-size: 1.45rem; }
+.product-details__row dd { margin: 0.2rem 0 0; font-size: 1.4rem; color: rgba(var(--color-foreground), 0.8); }
+.product-details__story { display: flex; gap: 2.4rem; align-items: flex-start; }
+.product-details__ornament { width: 8rem; flex: none; }
+.product-details__story h2 { margin: 0 0 1rem; }
+.product-details__story p { margin: 0; font-size: 1.5rem; line-height: 1.7; }
+.product-details__image { border-radius: var(--kc-radius); overflow: hidden; aspect-ratio: 16 / 11; }
+.product-details__image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+@media screen and (min-width: 990px) {
+  .product-details { grid-template-columns: 26rem 1fr 1fr; gap: 4rem; }
+  .product-details__specs { padding-right: 3.2rem; border-right: 1px solid var(--kc-line); }
+}
+@media screen and (max-width: 749px) {
+  .product-tabs__tab { padding: 1.2rem 1.4rem; font-size: 1.45rem; }
+  .product-details__ornament { width: 5rem; }
+}

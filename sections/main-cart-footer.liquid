@@ -104,6 +104,7 @@
                 </small>
               </div>
             {%- else -%}
+            {%- if settings.cc_enable -%}<p class="cc-note caption" data-cc-note hidden>{{ settings.cc_checkout_note | escape }}</p>{%- endif -%}
               <div class="cart__ctas" {{ block.shopify_attributes }}>
                 <button
                   type="submit"

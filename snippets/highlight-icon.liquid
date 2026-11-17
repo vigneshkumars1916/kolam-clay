@@ -1,0 +1,42 @@
+{%- doc -%}
+  Picks an outline icon for a product highlight by matching keywords in its text,
+  so the founders only type the words and the icon follows.
+
+  @param {string} text - Highlight text, e.g. "Dishwasher safe"
+{%- enddoc -%}
+{%- liquid
+  assign t = text | downcase
+  assign icon = 'vase'
+  if t contains 'microwave'
+    assign icon = 'microwave'
+  elsif t contains 'dishwasher'
+    assign icon = 'dishwasher'
+  elsif t contains 'food' or t contains 'lead'
+    assign icon = 'leaf'
+  elsif t contains 'hand' or t contains 'signed'
+    assign icon = 'hand'
+  elsif t contains 'sustain' or t contains 'last' or t contains 'terracotta' or t contains 'outdoor'
+    assign icon = 'sprout'
+  elsif t contains 'gift' or t contains 'box'
+    assign icon = 'gift'
+  elsif t contains 'note' or t contains 'card'
+    assign icon = 'bookmark'
+  elsif t contains 'studio' or t contains 'chennai' or t contains 'adyar'
+    assign icon = 'pin'
+  elsif t contains 'seat' or t contains 'people'
+    assign icon = 'users'
+  elsif t contains 'hour' or t contains 'duration'
+    assign icon = 'clock'
+  elsif t contains 'beginner' or t contains 'level'
+    assign icon = 'level'
+  elsif t contains 'material' or t contains 'include'
+    assign icon = 'box'
+  elsif t contains 'raku' or t contains 'fire' or t contains 'kiln'
+    assign icon = 'flame'
+  elsif t contains 'drain' or t contains 'glazed' or t contains 'indoor'
+    assign icon = 'sprout'
+  elsif t contains 'one of a kind'
+    assign icon = 'star'
+  endif
+  render 'line-icon', name: icon
+-%}

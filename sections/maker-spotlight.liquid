@@ -1,0 +1,61 @@
+{{ 'section-maker-spotlight.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign maker = product.metafields.custom.maker.value
+  if section.settings.potter != blank
+    assign maker = section.settings.potter
+  endif
+-%}
+{%- if maker -%}
+  <div class="maker-spotlight color-{{ section.settings.color_scheme }} kc-section" style="--kc-pt: {{ section.settings.padding_top }}px; --kc-pb: {{ section.settings.padding_bottom }}px;">
+    <div class="page-width">
+      <div class="maker-spotlight__card gradient">
+        <div class="maker-spotlight__who">
+          <div class="maker-spotlight__portrait">
+            {%- if maker.portrait != blank -%}
+              {{ maker.portrait.value | image_url: width: 240 | image_tag: loading: 'lazy', width: 96, height: 96, alt: maker.name.value }}
+            {%- else -%}
+              <span aria-hidden="true">{{ maker.name.value | slice: 0 }}</span>
+            {%- endif -%}
+          </div>
+          <div>
+            <h2 class="maker-spotlight__name h3">{{ section.settings.prefix }} {{ maker.name.value | split: ' ' | first }}</h2>
+            <p class="maker-spotlight__role">{{ maker.role.value }}</p>
+            <a class="maker-spotlight__link" href="{{ maker.system.url }}">{{ section.settings.link_label }}{%- render 'line-icon', name: 'arrow' -%}</a>
+          </div>
+        </div>
+        {%- if maker.quote != blank -%}
+          <figure class="maker-spotlight__quote">
+            <span class="maker-spotlight__mark" aria-hidden="true">“</span>
+            <blockquote><p>{{ maker.quote.value }}</p></blockquote>
+            <figcaption>— {{ maker.name.value | split: ' ' | first }}</figcaption>
+          </figure>
+        {%- endif -%}
+        {%- if section.settings.show_image and maker.feature_image != blank -%}
+          <div class="maker-spotlight__image">
+            {{ maker.feature_image.value | image_url: width: 900 | image_tag: widths: '400, 600, 900', sizes: '(min-width: 990px) 30vw, 100vw', loading: 'lazy', alt: '' }}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+
+{% schema %}
+{
+  "name": "Meet the maker",
+  "tag": "section",
+  "class": "section section-maker-spotlight",
+  "settings": [
+    { "type": "paragraph", "content": "Shows the potter chosen in the product's Maker field." },
+    { "type": "metaobject", "id": "potter", "label": "Always show this potter", "metaobject_type": "potter", "info": "Optional. Leave blank to use each product's own maker." },
+    { "type": "text", "id": "prefix", "label": "Heading prefix", "default": "Made by" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "View maker profile" },
+    { "type": "checkbox", "id": "show_image", "label": "Show the potter's feature image", "default": true },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Colour scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 12 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 12 }
+  ],
+  "presets": [ { "name": "Meet the maker" } ]
+}
+{% endschema %}

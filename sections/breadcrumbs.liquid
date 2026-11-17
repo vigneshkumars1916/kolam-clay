@@ -1,0 +1,135 @@
+{%- liquid
+  assign crumbs_names = ''
+  assign excluded = section.settings.skip_collections | split: ','
+  assign mid_title = blank
+  assign mid_url = blank
+  case request.page_type
+    when 'product'
+      for c in product.collections
+        unless excluded contains c.handle
+          assign mid_title = c.title
+          assign mid_url = c.url
+          break
+        endunless
+      endfor
+      if collection
+        assign mid_title = collection.title
+        assign mid_url = collection.url
+      endif
+      assign current = product.title
+    when 'collection'
+      assign current = collection.title
+    when 'metaobject'
+      assign mid_title = section.settings.makers_label
+      assign mid_url = section.settings.makers_link
+      assign current = metaobject.name.value | default: page_title
+    when 'page'
+      assign current = page.title
+    when 'blog'
+      assign current = blog.title
+    when 'article'
+      assign mid_title = blog.title
+      assign mid_url = blog.url
+      assign current = article.title
+    else
+      assign current = page_title
+  endcase
+-%}
+<nav class="kc-breadcrumbs page-width" aria-label="{{ section.settings.label | escape }}">
+  <ol role="list">
+    <li><a href="{{ routes.root_url }}">{{ section.settings.home_label }}</a></li>
+    {%- if mid_title != blank -%}<li><a href="{{ mid_url }}">{{ mid_title }}</a></li>{%- endif -%}
+    <li><span aria-current="page">{{ current }}</span></li>
+  </ol>
+</nav>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": {{ section.settings.home_label | json }}, "item": {{ request.origin | append: routes.root_url | json }} }
+      {%- if mid_title != blank -%},
+      { "@type": "ListItem", "position": 2, "name": {{ mid_title | json }}, "item": {{ request.origin | append: mid_url | json }} }
+      {%- endif -%},
+      { "@type": "ListItem", "position": {% if mid_title != blank %}3{% else %}2{% endif %}, "name": {{ current | json }} }
+    ]
+  }
+</script>
+
+{%- unless section.settings.leaves == 'none' or section.settings.leaves == blank -%}
+  {%- assign leaf_class = 'leaf-sprig--' | append: section.settings.leaves -%}
+  {%- render 'leaf-sprig', class: leaf_class -%}
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Breadcrumbs",
+  "tag": "div",
+  "class": "section-breadcrumbs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "home_label",
+      "label": "Home label",
+      "default": "Home"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Name for screen readers",
+      "default": "Breadcrumb"
+    },
+    {
+      "type": "text",
+      "id": "skip_collections",
+      "label": "Collections to skip on product pages",
+      "default": "frontpage,shop,best-sellers,new-arrivals,one-of-a-kind",
+      "info": "Comma-separated collection handles. The first other collection is shown."
+    },
+    {
+      "type": "text",
+      "id": "makers_label",
+      "label": "Makers page label",
+      "default": "Our makers"
+    },
+    {
+      "type": "url",
+      "id": "makers_link",
+      "label": "Makers page link"
+    },
+    {
+      "type": "select",
+      "id": "leaves",
+      "label": "Leaf decoration",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Breadcrumbs"
+    }
+  ]
+}
+{% endschema %}

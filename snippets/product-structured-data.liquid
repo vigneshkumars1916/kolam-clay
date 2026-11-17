@@ -1,0 +1,102 @@
+{%- doc -%}
+  Product structured data (schema.org) with offers per variant, the studio as manufacturer
+  and the potter as a linked Person, so search engines and AI assistants can cite who made the piece.
+
+  @param {product} product - The product
+{%- enddoc -%}
+{%- liquid
+  assign maker = product.metafields.custom.maker.value
+  assign is_ooak = product.metafields.custom.one_of_a_kind.value
+  assign product_url = request.origin | append: product.url
+  assign product_id = product_url | append: '#product'
+  assign org_id = request.origin | append: '/#organization'
+-%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Product",
+      "@id": {{ product_id | json }},
+      "name": {{ product.title | json }},
+      "url": {{ product_url | json }},
+      "description": {{ product.description | strip_html | strip_newlines | truncate: 500 | json }},
+      "sku": {{ product.selected_or_first_available_variant.sku | json }},
+      "category": {{ product.type | json }},
+      {%- if product.media.size > 0 %}
+      "image": [
+        {%- for media in product.media limit: 5 -%}
+          {{ media.preview_image | image_url: width: 1200 | prepend: 'https:' | json }}{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ],
+      {%- endif %}
+      "brand": { "@type": "Brand", "name": {{ shop.name | json }} },
+      "manufacturer": { "@id": {{ org_id | json }} },
+      {%- if product.metafields.custom.material != blank %}
+      "material": {{ product.metafields.custom.material.value | json }},
+      {%- endif %}
+      "additionalProperty": [
+        {%- if maker %}{ "@type": "PropertyValue", "name": "Made by", "value": {{ maker.name.value | json }} },{% endif %}
+        {%- if product.metafields.custom.finish != blank %}{ "@type": "PropertyValue", "name": "Finish", "value": {{ product.metafields.custom.finish.value | json }} },{% endif %}
+        {%- if product.metafields.custom.capacity != blank %}{ "@type": "PropertyValue", "name": "Capacity", "value": {{ product.metafields.custom.capacity.value | newline_to_br | strip_html | json }} },{% endif %}
+        {%- if product.metafields.custom.dimensions != blank %}{ "@type": "PropertyValue", "name": "Dimensions", "value": {{ product.metafields.custom.dimensions.value | newline_to_br | replace: '<br />', '; ' | json }} },{% endif %}
+        { "@type": "PropertyValue", "name": "Handmade", "value": "Yes, thrown and glazed by hand in Chennai, India" }
+        {%- if is_ooak %},{ "@type": "PropertyValue", "name": "Edition", "value": "One of a kind (1 made)" }{% endif %}
+      ],
+      "countryOfOrigin": { "@type": "Country", "name": "India" },
+      "offers": [
+        {%- for variant in product.variants -%}
+          {%- liquid
+            if variant.available
+              assign availability = 'https://schema.org/InStock'
+            elsif is_ooak
+              assign availability = 'https://schema.org/SoldOut'
+            else
+              assign availability = 'https://schema.org/OutOfStock'
+            endif
+          -%}
+          {
+            "@type": "Offer",
+            "name": {{ variant.title | json }},
+            "sku": {{ variant.sku | json }},
+            "url": {{ request.origin | append: variant.url | json }},
+            "price": {{ variant.price | money_without_currency | remove: ',' | json }},
+            "priceCurrency": {{ cart.currency.iso_code | json }},
+            "availability": {{ availability | json }},
+            "itemCondition": "https://schema.org/NewCondition",
+            "seller": { "@id": {{ org_id | json }} }
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    },
+    {
+      "@type": ["Organization", "LocalBusiness"],
+      "@id": {{ org_id | json }},
+      "name": {{ shop.name | json }},
+      "url": {{ request.origin | json }},
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": {{ settings.studio_street | json }},
+        "addressLocality": {{ settings.studio_locality | json }},
+        "addressRegion": {{ settings.studio_region | json }},
+        "postalCode": {{ settings.studio_postcode | json }},
+        "addressCountry": "IN"
+      }
+    }
+    {%- if maker -%},
+    {
+      "@type": "Person",
+      "@id": {{ request.origin | append: maker.system.url | append: '#person' | json }},
+      "name": {{ maker.name.value | json }},
+      "jobTitle": {{ maker.role.value | json }},
+      "url": {{ request.origin | append: maker.system.url | json }},
+      {%- if maker.portrait != blank %}
+      "image": {{ maker.portrait.value | image_url: width: 600 | prepend: 'https:' | json }},
+      {%- endif %}
+      "worksFor": { "@id": {{ org_id | json }} },
+      "makesOffer": { "@type": "Offer", "itemOffered": { "@id": {{ product_id | json }} } }
+    }
+    {%- endif %}
+  ]
+}
+</script>

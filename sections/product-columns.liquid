@@ -1,0 +1,180 @@
+{{ 'section-product-columns.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  Side-by-side product lists, e.g. "Best sellers" next to "New arrivals".
+  Each block is one list with its own heading, collection and product count.
+{%- endcomment -%}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+<div class="product-columns color-{{ section.settings.color_scheme }} gradient kc-section" style="--kc-pt: {{ section.settings.padding_top }}px; --kc-pb: {{ section.settings.padding_bottom }}px;">
+  <div class="page-width product-columns__grid product-columns__grid--{{ section.blocks.size }}">
+    {%- for block in section.blocks -%}
+      {%- assign collection = block.settings.collection -%}
+      <div class="product-columns__col" {{ block.shopify_attributes }}>
+        <div class="kc-head">
+          <div>
+            <h2 class="kc-head__title h2">{{ block.settings.heading }}</h2>
+            {%- if block.settings.subheading != blank -%}<p class="kc-head__sub">{{ block.settings.subheading }}</p>{%- endif -%}
+          </div>
+          {%- if block.settings.view_all_label != blank and collection != blank -%}
+            <a class="kc-link-arrow" href="{{ collection.url }}">
+              {{- block.settings.view_all_label -}}
+              <span class="kc-visually-hidden">: {{ block.settings.heading }}</span>
+              {%- render 'line-icon', name: 'arrow' -%}
+            </a>
+          {%- endif -%}
+        </div>
+        <ul class="product-columns__list grid grid--{{ block.settings.count }}-col-desktop grid--2-col-tablet-down" role="list">
+          {%- if collection != blank and collection.products_count > 0 -%}
+            {%- for product in collection.products limit: block.settings.count -%}
+              <li class="grid__item">
+                {%- render 'card-product',
+                  card_product: product,
+                  media_aspect_ratio: 'square',
+                  image_shape: 'default',
+                  show_secondary_image: false,
+                  show_vendor: false,
+                  show_rating: false,
+                  lazy_load: true,
+                  section_id: section.id
+                -%}
+              </li>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..block.settings.count) -%}
+              <li class="grid__item">{%- render 'card-product', show_vendor: false -%}</li>
+            {%- endfor -%}
+          {%- endif -%}
+        </ul>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+
+{%- unless section.settings.leaves == 'none' or section.settings.leaves == blank -%}
+  {%- assign leaf_class = 'leaf-sprig--' | append: section.settings.leaves -%}
+  {%- render 'leaf-sprig', class: leaf_class -%}
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Product columns",
+  "tag": "section",
+  "class": "section section-product-columns",
+  "max_blocks": 2,
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Colour scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "select",
+      "id": "leaves",
+      "label": "Leaf decoration",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "list",
+      "name": "Product list",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Best sellers"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "The pieces people come back for"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "range",
+          "id": "count",
+          "label": "Products to show",
+          "min": 2,
+          "max": 4,
+          "step": 1,
+          "default": 3
+        },
+        {
+          "type": "text",
+          "id": "view_all_label",
+          "label": "View all link label",
+          "default": "View all"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product columns",
+      "blocks": [
+        {
+          "type": "list"
+        },
+        {
+          "type": "list",
+          "settings": {
+            "heading": "New arrivals",
+            "subheading": "Fresh out of the kiln"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

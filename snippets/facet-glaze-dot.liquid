@@ -1,0 +1,10 @@
+{%- doc -%}
+  Colour dot before a filter value when the filter is a glaze option.
+
+  @param {filter} filter - Storefront filter
+  @param {filter_value} value - Filter value
+{%- enddoc -%}
+{%- capture is_glaze -%}{%- render 'is-glaze-option', option_name: filter.label -%}{%- endcapture -%}
+{%- if is_glaze == 'true' -%}
+  <span class="kc-facet-swatch" style="--swatch: {% render 'glaze-color', name: value.label %};" aria-hidden="true"></span>
+{%- endif -%}

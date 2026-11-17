@@ -1,0 +1,172 @@
+{%- liquid
+  assign slide_count = section.blocks.size
+  assign pt = section.settings.padding_top | append: 'px'
+-%}
+{{ 'section-home-hero.css' | asset_url | stylesheet_tag }}
+{%- if slide_count > 1 -%}
+  <script src="{{ 'home-hero.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+<home-hero
+  class="home-hero color-{{ section.settings.color_scheme }} gradient{% if section.settings.image_fade %} home-hero--fade{% endif %}"
+  style="--hero-min: {{ section.settings.min_height }}rem; --hero-image-width: {{ section.settings.image_width }}%;"
+  data-autoplay="{{ section.settings.autoplay }}"
+  data-speed="{{ section.settings.speed }}"
+  aria-roledescription="carousel"
+  aria-label="{{ section.settings.accessible_label | escape }}"
+>
+  {%- if section.settings.show_ornament -%}
+    {%- render 'kolam-ornament', class: 'home-hero__ornament' -%}
+  {%- endif -%}
+
+  <div class="home-hero__track" data-track aria-live="off">
+    {%- for block in section.blocks -%}
+      <div
+        class="home-hero__slide{% if forloop.first %} is-active{% endif %}"
+        data-slide
+        role="group"
+        aria-roledescription="slide"
+        aria-label="{{ forloop.index }} / {{ slide_count }}"
+        {% unless forloop.first %}inert aria-hidden="true"{% endunless %}
+        {{ block.shopify_attributes }}
+      >
+        <div class="home-hero__media">
+          {%- if block.settings.image != blank -%}
+            {%- liquid
+              assign loading = 'lazy'
+              assign priority = 'auto'
+              assign img_style = 'object-position: ' | append: block.settings.image_position
+              if forloop.first and section.index == 1
+                assign loading = 'eager'
+                assign priority = 'high'
+              endif
+            -%}
+            {{
+              block.settings.image
+              | image_url: width: 1800
+              | image_tag:
+                widths: '600, 900, 1200, 1500, 1800',
+                sizes: '(min-width: 990px) 62vw, 100vw',
+                loading: loading,
+                fetchpriority: priority,
+                alt: block.settings.image.alt,
+                style: img_style
+            }}
+          {%- else -%}
+            {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+
+        <div class="home-hero__content page-width">
+          <div class="home-hero__copy">
+            {%- if block.settings.eyebrow != blank -%}
+              <p class="kc-eyebrow">{{ block.settings.eyebrow }}</p>
+            {%- endif -%}
+            {%- if block.settings.heading != blank -%}
+              {%- if forloop.first and section.settings.first_heading_h1 -%}
+                <h1 class="home-hero__title">{{ block.settings.heading }}</h1>
+              {%- else -%}
+                <h2 class="home-hero__title">{{ block.settings.heading }}</h2>
+              {%- endif -%}
+            {%- endif -%}
+            {%- if block.settings.subheading != blank -%}
+              <p class="home-hero__subtitle kc-italic">{{ block.settings.subheading }}</p>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <div class="home-hero__text kc-rte">{{ block.settings.text }}</div>
+            {%- endif -%}
+            <div class="kc-buttons">
+              {%- if block.settings.button_label != blank -%}
+                <a class="button button--clay" href="{{ block.settings.button_link | default: routes.all_products_collection_url }}">
+                  {{- block.settings.button_label -}}
+                  {%- render 'line-icon', name: 'arrow' -%}
+                </a>
+              {%- endif -%}
+              {%- if block.settings.button_label_2 != blank -%}
+                <a class="button button--secondary" href="{{ block.settings.button_link_2 | default: routes.collections_url }}">
+                  {%- if block.settings.button_icon_2 != 'none' -%}
+                    {%- render 'line-icon', name: block.settings.button_icon_2, class: 'line-icon--lead' -%}
+                  {%- endif -%}
+                  {{- block.settings.button_label_2 -}}
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- if slide_count > 1 -%}
+    <div class="home-hero__controls page-width">
+      <div class="home-hero__dots">
+        {%- for block in section.blocks -%}
+          <button type="button" class="home-hero__dot" data-dot aria-current="{% if forloop.first %}true{% else %}false{% endif %}">
+            <span class="kc-visually-hidden">{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }}</span>
+          </button>
+        {%- endfor -%}
+      </div>
+      {%- if section.settings.autoplay -%}
+        <button
+          type="button"
+          class="home-hero__toggle"
+          data-autoplay-toggle
+          aria-pressed="false"
+          aria-label="{{ 'sections.slideshow.pause_slideshow' | t }}"
+          data-pause-label="{{ 'sections.slideshow.pause_slideshow' | t }}"
+          data-play-label="{{ 'sections.slideshow.play_slideshow' | t }}"
+        >
+          <span class="home-hero__toggle-pause" aria-hidden="true"></span>
+        </button>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</home-hero>
+
+{% schema %}
+{
+  "name": "Hero carousel",
+  "tag": "section",
+  "class": "section section-home-hero",
+  "max_blocks": 5,
+  "settings": [
+    { "type": "text", "id": "accessible_label", "label": "Carousel name for screen readers", "default": "Featured" },
+    { "type": "checkbox", "id": "first_heading_h1", "label": "Use the first slide heading as the page title (H1)", "default": true, "info": "Keep this on for the homepage so search engines see one main heading." },
+    { "type": "checkbox", "id": "autoplay", "label": "Rotate slides automatically", "default": true },
+    { "type": "range", "id": "speed", "label": "Seconds per slide", "min": 4, "max": 12, "step": 1, "default": 7 },
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "min_height", "label": "Minimum height", "min": 36, "max": 80, "step": 2, "unit": "rem", "default": 54 },
+    { "type": "range", "id": "image_width", "label": "Image width on desktop", "min": 45, "max": 75, "step": 5, "unit": "%", "default": 60 },
+    { "type": "checkbox", "id": "image_fade", "label": "Blend image into background", "default": true },
+    { "type": "checkbox", "id": "show_ornament", "label": "Show kolam ornament", "default": true },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Colour scheme", "default": "scheme-5" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 0 }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "select", "id": "image_position", "label": "Image focus", "default": "center center", "options": [
+          { "value": "left center", "label": "Left" }, { "value": "center center", "label": "Centre" }, { "value": "right center", "label": "Right" }
+        ] },
+        { "type": "text", "id": "eyebrow", "label": "Small label", "default": "Handmade in Chennai" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Kolam & Clay" },
+        { "type": "text", "id": "subheading", "label": "Subheading", "default": "Handcrafted pottery for everyday living" },
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Every piece is thrown by hand on our wheel in Adyar, glazed in small batches and made to be used every day.</p>" },
+        { "type": "text", "id": "button_label", "label": "Primary button label", "default": "Shop the collection" },
+        { "type": "url", "id": "button_link", "label": "Primary button link" },
+        { "type": "text", "id": "button_label_2", "label": "Second button label", "default": "Book a workshop" },
+        { "type": "url", "id": "button_link_2", "label": "Second button link" },
+        { "type": "select", "id": "button_icon_2", "label": "Second button icon", "default": "calendar", "options": [
+          { "value": "none", "label": "None" }, { "value": "calendar", "label": "Calendar" }, { "value": "gift", "label": "Gift" }, { "value": "hand", "label": "Hand" }
+        ] }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Hero carousel", "blocks": [ { "type": "slide" } ] }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,22 @@
+.maker-spotlight__card { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 3.2rem; border-radius: var(--kc-radius-lg); overflow: hidden; padding-left: 3.2rem; background: rgba(var(--kc-sand), 1); min-height: 13rem; }
+.maker-spotlight__who { display: flex; align-items: center; gap: 2rem; padding: 2.4rem 3.2rem 2.4rem 0; border-right: 1px solid var(--kc-line); }
+.maker-spotlight__portrait { width: 9.6rem; height: 9.6rem; border-radius: 50%; overflow: hidden; flex: none; background: #F3DCC2; display: grid; place-items: center; font-family: var(--font-heading-family); font-size: 3.6rem; color: rgb(var(--kc-clay)); box-shadow: 0 0 0 4px rgb(var(--color-background)); }
+.maker-spotlight__portrait img { width: 100%; height: 100%; object-fit: cover; }
+.maker-spotlight__name { margin: 0 0 0.4rem; }
+.maker-spotlight__role { margin: 0 0 0.8rem; font-size: 1.4rem; }
+.maker-spotlight__link { display: inline-flex; align-items: center; gap: 0.6rem; color: rgb(var(--kc-clay)); font-size: 1.45rem; text-underline-offset: 0.3rem; }
+.maker-spotlight__link .line-icon { width: 1.6rem; height: 1.6rem; }
+.maker-spotlight__quote { margin: 0; position: relative; padding: 2.4rem 0 2.4rem 4rem; max-width: 44ch; }
+.maker-spotlight__mark { position: absolute; left: 0; top: 1.2rem; font-family: var(--font-heading-family); font-size: 6rem; line-height: 1; color: var(--kc-ornament); }
+.maker-spotlight__quote blockquote { margin: 0; font-size: 1.7rem; line-height: 1.6; }
+.maker-spotlight__quote blockquote p { margin: 0; display: inline; }
+.maker-spotlight__quote figcaption { display: inline; font-size: 1.7rem; }
+.maker-spotlight__image { align-self: stretch; width: min(34vw, 36rem); }
+.maker-spotlight__image img { width: 100%; height: 100%; object-fit: cover; display: block; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 30%); mask-image: linear-gradient(90deg, transparent 0, #000 30%); }
+@media screen and (max-width: 989px) {
+  .maker-spotlight__card { grid-template-columns: 1fr; padding: 2.4rem; gap: 1.6rem; }
+  .maker-spotlight__who { border-right: 0; border-bottom: 1px solid var(--kc-line); padding: 0 0 2rem; }
+  .maker-spotlight__quote { padding: 1.6rem 0 0 3.6rem; }
+  .maker-spotlight__image { width: auto; margin: 0 -2.4rem -2.4rem; height: 20rem; }
+  .maker-spotlight__image img { -webkit-mask-image: none; mask-image: none; }
+}

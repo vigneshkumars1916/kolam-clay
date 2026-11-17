@@ -1,0 +1,20 @@
+{%- doc -%}
+  Personal note field for cart lines whose product has "Allow gift note" ticked.
+  Saved as the line item property "Gift note", which shows on the order in Shopify admin.
+
+  @param {line_item} item - Cart line
+  @param {number} line - 1-based line number
+{%- enddoc -%}
+{%- if item.product.metafields.custom.gift_note.value -%}
+  {%- assign note = item.properties['Gift note'] -%}
+  {%- assign field_id = 'GiftNote-' | append: item.key | handleize -%}
+  <gift-note-field class="gift-note" data-line="{{ line }}" data-quantity="{{ item.quantity }}" data-saved-label="{{ settings.gift_note_saved | escape }}">
+    <script type="application/json" data-properties>{{ item.properties | json }}</script>
+    <label class="gift-note__label" for="{{ field_id }}">{%- render 'line-icon', name: 'gift' -%}{{ settings.gift_note_label }}</label>
+    <div class="gift-note__row">
+      <input type="text" id="{{ field_id }}" class="gift-note__input" maxlength="40" value="{{ note | escape }}" placeholder="{{ settings.gift_note_placeholder | escape }}" aria-describedby="{{ field_id }}-count" autocomplete="off">
+      <button type="button" class="gift-note__save">{{ settings.gift_note_save }}</button>
+    </div>
+    <p class="gift-note__meta"><span id="{{ field_id }}-count"><span data-count>{{ note | size }}</span>/40</span><span class="gift-note__status" aria-live="polite" data-status></span></p>
+  </gift-note-field>
+{%- endif -%}

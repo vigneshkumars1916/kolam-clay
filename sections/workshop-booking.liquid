@@ -1,0 +1,185 @@
+{%- comment -%}
+  Workshop booking. Each variant is one session (Date × Time). Seats are the variant's inventory,
+  so Shopify stops overselling at checkout and the page can show seats left per session.
+{%- endcomment -%}
+{{ 'section-workshop-booking.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'workshop-booking.js' | asset_url }}" defer="defer"></script>
+{%- liquid
+  assign product_form_id = 'workshop-form-' | append: section.id
+  assign first_session = product.selected_or_first_available_variant
+  assign maker = product.metafields.custom.maker.value
+-%}
+
+<div class="workshop color-{{ section.settings.color_scheme }} kc-section" style="--kc-pt: {{ section.settings.padding_top }}px; --kc-pb: {{ section.settings.padding_bottom }}px;">
+  <div class="page-width workshop__grid">
+    <div class="workshop__media-col">
+      <media-switcher class="workshop__gallery">
+        <div class="workshop__thumbs" role="tablist" aria-label="{{ section.settings.gallery_label | escape }}">
+          {%- for media in product.media limit: 6 -%}
+            <button type="button" role="tab" class="workshop__thumb" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="WorkshopMedia-{{ media.id }}" tabindex="{% if forloop.first %}0{% else %}-1{% endif %}">
+              {{ media.preview_image | image_url: width: 240 | image_tag: loading: 'lazy', width: 120, height: 100, alt: '' }}
+              <span class="kc-visually-hidden">{{ media.alt | default: product.title }}</span>
+            </button>
+          {%- endfor -%}
+        </div>
+        <div class="workshop__stage">
+          {%- for media in product.media limit: 6 -%}
+            <div class="workshop__slide" id="WorkshopMedia-{{ media.id }}" role="tabpanel" {% unless forloop.first %}hidden{% endunless %}>
+              {%- liquid
+                assign loading = 'lazy'
+                if forloop.first
+                  assign loading = 'eager'
+                endif
+              -%}
+              {{ media.preview_image | image_url: width: 1200 | image_tag: widths: '500, 800, 1000, 1200', sizes: '(min-width: 990px) 40vw, 100vw', loading: loading, alt: media.alt | default: product.title }}
+            </div>
+          {%- else -%}
+            <div class="workshop__slide">{{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+          {%- endfor -%}
+        </div>
+      </media-switcher>
+
+      {%- assign included = section.blocks | where: 'type', 'included' -%}
+      {%- if included.size > 0 -%}
+        <div class="workshop__included">
+          <h2 class="h3">{{ section.settings.included_heading }}</h2>
+          <ul role="list">
+            {%- for block in included -%}
+              <li {{ block.shopify_attributes }}>{%- render 'line-icon', name: block.settings.icon -%}<span>{{ block.settings.text }}</span></li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="workshop__info">
+      <div class="workshop__intro">
+        <div>
+          {%- if section.settings.badge != blank -%}
+            <p class="workshop__badge">{%- render 'line-icon', name: 'calendar' -%}{{ section.settings.badge }}</p>
+          {%- endif -%}
+          <h1 class="workshop__title">{{ product.title }}</h1>
+          <p class="workshop__price">
+            <span class="workshop__amount">{{ first_session.price | money }}</span>
+            <span>{{ section.settings.price_suffix }}</span>
+            {%- if cart.taxes_included -%}<span class="kc-muted">{{ 'products.product.taxes_included' | t }}</span>{%- endif -%}
+          </p>
+          <div class="workshop__desc rte">{{ product.description }}</div>
+        </div>
+        {%- assign facts = product.metafields.custom.highlights.value -%}
+        {%- if facts != blank -%}
+          <ul class="workshop__facts" role="list">
+            {%- for item in facts -%}
+              <li>{%- render 'highlight-icon', text: item -%}<span>{{ item }}</span></li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      <workshop-booking class="workshop__booking" data-form-id="{{ product_form_id }}" data-seats-label="{{ section.settings.seats_label | escape }}" data-full-label="{{ section.settings.full_label | escape }}" data-book-label="{{ section.settings.button_label | escape }}">
+        <script type="application/json" data-sessions>
+          [
+            {%- for variant in product.variants -%}
+              {%- assign start = variant.metafields.custom.session_start.value -%}
+              {"id": {{ variant.id }}, "date": {{ start | date: '%Y-%m-%d' | json }}, "dateLabel": {{ variant.option1 | json }}, "time": {{ variant.option2 | default: '' | json }}, "available": {{ variant.available | json }}, "seats": {% if variant.inventory_management == 'shopify' %}{{ variant.inventory_quantity | at_least: 0 }}{% else %}null{% endif %}}{% unless forloop.last %},{% endunless %}
+            {%- endfor -%}
+          ]
+        </script>
+
+        <div class="workshop__pickers">
+          <div class="workshop__calendar" data-calendar hidden>
+            <h2 class="workshop__label">{%- render 'line-icon', name: 'calendar' -%}{{ section.settings.date_heading }}</h2>
+            <div class="cal">
+              <div class="cal__head">
+                <button type="button" class="cal__nav" data-prev aria-label="{{ section.settings.prev_label | escape }}">{%- render 'line-icon', name: 'arrow', class: 'is-flipped' -%}</button>
+                <p class="cal__month" data-month aria-live="polite"></p>
+                <button type="button" class="cal__nav" data-next aria-label="{{ section.settings.next_label | escape }}">{%- render 'line-icon', name: 'arrow' -%}</button>
+              </div>
+              <div class="cal__grid" data-grid role="grid"></div>
+            </div>
+          </div>
+
+          <fieldset class="workshop__slots">
+            <legend class="workshop__label">{%- render 'line-icon', name: 'clock' -%}{{ section.settings.slot_heading }}</legend>
+            {%- for variant in product.variants -%}
+              {%- assign start = variant.metafields.custom.session_start.value -%}
+              <div class="slot" data-slot data-date="{{ start | date: '%Y-%m-%d' }}">
+                <input type="radio" name="workshop-session-{{ section.id }}" id="Session-{{ variant.id }}" value="{{ variant.id }}" data-seats="{{ variant.inventory_quantity | at_least: 0 }}" {% if variant.id == first_session.id %}checked{% endif %} {% unless variant.available %}disabled{% endunless %}>
+                <label for="Session-{{ variant.id }}">
+                  <span class="slot__when"><span class="slot__date">{{ variant.option1 }}</span><span class="slot__time">{{ variant.option2 }}</span></span>
+                  {%- if variant.available -%}
+                    <span class="slot__seats{% if variant.inventory_quantity <= 3 %} slot__seats--low{% endif %}">{{ section.settings.seats_label | replace: '[seats]', variant.inventory_quantity }}</span>
+                  {%- else -%}
+                    <span class="slot__seats slot__seats--full">{{ section.settings.full_label }}</span>
+                  {%- endif -%}
+                </label>
+              </div>
+            {%- endfor -%}
+          </fieldset>
+        </div>
+
+        <product-form class="product-form workshop__form" data-hide-errors="false" data-section-id="{{ section.id }}">
+          <div class="product-form__error-message-wrapper" role="alert" hidden>
+            <span class="product-form__error-message"></span>
+          </div>
+          {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+            <input type="hidden" name="id" value="{{ first_session.id }}" class="product-variant-id" data-session-input>
+            <div class="workshop__qty">
+              <label class="workshop__label" for="Participants-{{ section.id }}">{%- render 'line-icon', name: 'users' -%}{{ section.settings.qty_label }}</label>
+              <div class="workshop__stepper">
+                <button type="button" data-step="-1" aria-label="{{ 'products.product.quantity.decrease' | t: product: product.title | escape }}">−</button>
+                <input type="number" id="Participants-{{ section.id }}" name="quantity" value="1" min="1" max="{{ first_session.inventory_quantity | at_least: 1 }}" inputmode="numeric" data-qty>
+                <button type="button" data-step="1" aria-label="{{ 'products.product.quantity.increase' | t: product: product.title | escape }}">+</button>
+              </div>
+            </div>
+            <button type="submit" name="add" class="product-form__submit button button--forest workshop__submit" {% unless first_session.available %}disabled{% endunless %}>
+              {%- render 'line-icon', name: 'calendar', class: 'line-icon--lead' -%}
+              <span>{% if first_session.available %}{{ section.settings.button_label }}{% else %}{{ section.settings.full_label }}{% endif %}</span>
+              <div class="loading__spinner hidden">{%- render 'loading-spinner' -%}</div>
+            </button>
+          {%- endform -%}
+        </product-form>
+        <p class="kc-visually-hidden" aria-live="polite" data-status></p>
+      </workshop-booking>
+    </div>
+  </div>
+</div>
+
+{%- render 'workshop-structured-data', product: product, max_seats: section.settings.max_seats -%}
+
+{% schema %}
+{
+  "name": "Workshop booking",
+  "tag": "section",
+  "class": "section section-workshop-booking",
+  "settings": [
+    { "type": "text", "id": "badge", "label": "Badge", "default": "In-studio workshop" },
+    { "type": "text", "id": "price_suffix", "label": "Price suffix", "default": "per person" },
+    { "type": "text", "id": "date_heading", "label": "Date picker heading", "default": "Select a workshop date" },
+    { "type": "text", "id": "slot_heading", "label": "Time slot heading", "default": "Choose a time slot" },
+    { "type": "text", "id": "qty_label", "label": "Participants label", "default": "Number of participants" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Book workshop" },
+    { "type": "text", "id": "seats_label", "label": "Seats left label", "default": "[seats] seats left", "info": "[seats] is replaced with the number left." },
+    { "type": "text", "id": "full_label", "label": "Fully booked label", "default": "Fully booked" },
+    { "type": "range", "id": "max_seats", "label": "Seats per session", "min": 2, "max": 20, "step": 1, "default": 8, "info": "Used for search engine event data. Seats on sale come from each session's inventory." },
+    { "type": "text", "id": "included_heading", "label": "Included heading", "default": "What's included" },
+    { "type": "text", "id": "gallery_label", "label": "Gallery name for screen readers", "default": "Workshop photos" },
+    { "type": "text", "id": "prev_label", "label": "Previous month label", "default": "Previous month" },
+    { "type": "text", "id": "next_label", "label": "Next month label", "default": "Next month" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Colour scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 20 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 32 }
+  ],
+  "blocks": [
+    { "type": "included", "name": "Included item", "settings": [
+      { "type": "select", "id": "icon", "label": "Icon", "default": "cloud", "options": [
+        { "value": "cloud", "label": "Clay" }, { "value": "cup", "label": "Cup" }, { "value": "box", "label": "Box" }, { "value": "bookmark", "label": "Bookmark" },
+        { "value": "hand", "label": "Hand" }, { "value": "flame", "label": "Kiln" }, { "value": "gift", "label": "Gift" }, { "value": "users", "label": "People" }
+      ] },
+      { "type": "text", "id": "text", "label": "Text", "default": "All materials (clay, tools, apron)" }
+    ] }
+  ],
+  "presets": [ { "name": "Workshop booking" } ]
+}
+{% endschema %}

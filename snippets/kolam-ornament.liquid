@@ -1,0 +1,33 @@
+{%- doc -%}
+  Decorative kolam motif drawn as interlaced loops around a dot grid.
+  Purely decorative, hidden from assistive technology.
+
+  @param {string} [class] - Extra class names
+  @param {string} [variant] - 'knot' (default) or 'flourish' (small divider)
+{%- enddoc -%}
+{%- if settings.show_ornaments -%}
+  {%- if variant == 'flourish' -%}
+    <svg class="kolam-ornament kolam-ornament--flourish {{ class }}" viewBox="0 0 64 16" aria-hidden="true" focusable="false">
+      <path d="M2 8h18M44 8h18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M32 2l6 6-6 6-6-6z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+      <circle cx="32" cy="8" r="1.4" fill="currentColor"/><circle cx="22.5" cy="8" r="1.2" fill="currentColor"/><circle cx="41.5" cy="8" r="1.2" fill="currentColor"/>
+    </svg>
+  {%- else -%}
+    <svg class="kolam-ornament {{ class }}" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M60 14c8 0 14 6 14 14s-6 14-14 14-14-6-14-14 6-14 14-14z"/>
+        <path d="M60 78c8 0 14 6 14 14s-6 14-14 14-14-6-14-14 6-14 14-14z"/>
+        <path d="M14 60c0-8 6-14 14-14s14 6 14 14-6 14-14 14-14-6-14-14z"/>
+        <path d="M78 60c0-8 6-14 14-14s14 6 14 14-6 14-14 14-14-6-14-14z"/>
+        <path d="M60 30l30 30-30 30-30-30z"/>
+        <path d="M60 44l16 16-16 16-16-16z"/>
+        <path d="M38 38c-8-8-8-20 0-24M82 38c8-8 8-20 0-24M38 82c-8 8-8 20 0 24M82 82c8 8 8 20 0 24"/>
+        <path d="M60 2v6M60 112v6M2 60h6M112 60h6"/>
+      </g>
+      <g fill="currentColor">
+        <circle cx="60" cy="60" r="3"/><circle cx="60" cy="28" r="2.4"/><circle cx="60" cy="92" r="2.4"/><circle cx="28" cy="60" r="2.4"/><circle cx="92" cy="60" r="2.4"/>
+        <circle cx="44" cy="44" r="1.8"/><circle cx="76" cy="44" r="1.8"/><circle cx="44" cy="76" r="1.8"/><circle cx="76" cy="76" r="1.8"/>
+      </g>
+    </svg>
+  {%- endif -%}
+{%- endif -%}
