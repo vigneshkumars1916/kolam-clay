@@ -1,0 +1,30 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {
+        "makers_label": "Our makers",
+        "makers_link": "/pages/our-makers"
+      }
+    },
+    "profile": {
+      "type": "maker-profile",
+      "settings": {}
+    },
+    "workshop": {
+      "type": "cta-banner",
+      "settings": {
+        "heading": "Learn at the wheel with us",
+        "text": "<p>Meera and Arjun teach every weekend workshop at the Adyar studio.</p>",
+        "button_label": "See workshop dates",
+        "link": "/products/weekend-pottery-workshop",
+        "image": "shopify://shop_images/Hands_Shaping_Clay_on_a_Spinning_Wheel.png"
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "profile",
+    "workshop"
+  ]
+}

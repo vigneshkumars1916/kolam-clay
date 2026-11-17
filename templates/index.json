@@ -1,75 +1,407 @@
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "hero": {
+      "type": "home-hero",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "slide-1": {
+          "type": "slide",
           "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "eyebrow": "Handmade in Chennai ♡",
+            "heading": "Kolam & Clay",
+            "subheading": "Handcrafted pottery for modern living",
+            "text": "<p>Every piece is shaped by hand, inspired by tradition, and made to be part of your everyday life.</p>",
+            "button_label": "Shop the collection",
+            "button_link": "shopify://collections/shop",
+            "button_label_2": "Book a workshop",
+            "button_link_2": "shopify://products/weekend-pottery-workshop",
+            "button_icon_2": "calendar",
+            "image": "shopify://shop_images/Steaming_Kolam_Terracotta_Coffee_Moment.png"
           }
         },
-        "button": {
-          "type": "buttons",
+        "slide-2": {
+          "type": "slide",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
+            "eyebrow": "Weekend workshops",
+            "heading": "Throw your first bowl",
+            "subheading": "Two and a half hours at the wheel",
+            "text": "<p>Eight seats a session at our Adyar studio. We fire your piece and you take it home.</p>",
+            "button_label": "See dates",
+            "button_link": "shopify://products/weekend-pottery-workshop",
             "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "button_icon_2": "none",
+            "image": "shopify://shop_images/Hands_Shaping_a_Clay_Bowl.png"
+          }
+        },
+        "slide-3": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "Made only once",
+            "heading": "One-of-a-kind pieces",
+            "subheading": "Raku vases and sculpted bowls",
+            "text": "<p>Signed by the potter who made them. When one sells, it stays here in our archive.</p>",
+            "button_label": "View the pieces",
+            "button_link": "shopify://collections/one-of-a-kind",
+            "button_label_2": "",
+            "button_icon_2": "none",
+            "image": "shopify://shop_images/Rustic_Raku_Ceramics_Still_Life.png"
+          }
+        },
+        "slide-4": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Cozy_Handcrafted_Mugs_and_Glowing_Lantern.png",
+            "image_position": "right center",
+            "eyebrow": "New on the shelf",
+            "heading": "Leaf & kolam mugs",
+            "subheading": "Painted and carved by hand",
+            "text": "<p>Cobalt leaves on speckled cream, or a kolam carved into raw terracotta. Two everyday mugs, made one at a time.</p>",
+            "button_label": "Shop mugs",
+            "button_link": "shopify://collections/mugs",
+            "button_label_2": "",
+            "button_icon_2": "none"
           }
         }
       },
       "block_order": [
-        "heading",
-        "button"
+        "slide-1",
+        "slide-4",
+        "slide-2",
+        "slide-3"
       ],
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "accessible_label": "Featured",
+        "first_heading_h1": true,
+        "autoplay": true,
+        "speed": 7,
+        "min_height": 54,
+        "image_width": 60,
+        "image_fade": true,
+        "show_ornament": true,
+        "color_scheme": "scheme-5",
+        "padding_top": 0
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "trust": {
+      "type": "icon-strip",
+      "blocks": {
+        "t1": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "text": "<p>Free shipping<br>above ₹1,499</p>",
+            "link": "/policies/shipping-policy"
+          }
+        },
+        "t2": {
+          "type": "item",
+          "settings": {
+            "icon": "shield",
+            "text": "<p>Secure payments<br>& easy returns</p>",
+            "link": "/policies/refund-policy"
+          }
+        },
+        "t3": {
+          "type": "item",
+          "settings": {
+            "icon": "leaf",
+            "text": "<p>Lead-free glazes<br>& plastic-free packing</p>"
+          }
+        },
+        "t4": {
+          "type": "item",
+          "settings": {
+            "icon": "heart",
+            "text": "<p>Made with love<br>in Chennai</p>",
+            "link": "/pages/our-story"
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ],
       "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
         "color_scheme": "scheme-1",
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "padding_top": 44,
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
+    "story": {
+      "type": "studio-story",
+      "blocks": {
+        "s1": {
+          "type": "eyebrow",
+          "settings": {
+            "text": "Our story"
+          }
+        },
+        "s2": {
+          "type": "heading",
+          "settings": {
+            "heading": "A little studio,\nbig dreams",
+            "size": "h0"
+          }
+        },
+        "s3": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Kolam & Clay is a two-person pottery studio in Chennai, born from a love of slow making and the patterns our grandmothers drew at the doorstep every morning.</p>"
+          }
+        },
+        "s4": {
+          "type": "button",
+          "settings": {
+            "label": "Know more about us",
+            "link": "shopify://pages/our-story",
+            "style": "button--clay"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "settings": {
+        "layout": "image_left",
+        "image_ratio": "landscape",
+        "media_share": 55,
+        "vertical_align": "center",
+        "text_align": "left",
+        "panel": true,
+        "mobile_text_first": false,
+        "heading_as_h1": false,
+        "accent_position": "top-right",
+        "color_scheme": "scheme-1",
+        "padding_top": 16,
+        "padding_bottom": 24,
+        "leaves": "top-left",
+        "image": "shopify://shop_images/Joyful_Pottery_Studio_Collaboration.png",
+        "accent_image": "shopify://shop_images/Watercolor_South_Indian_Temple_Gopuram.png"
+      }
+    },
+    "collections": {
+      "type": "collection-tiles",
+      "blocks": {
+        "c1": {
+          "type": "tile",
+          "settings": {
+            "collection": "mugs",
+            "image": "shopify://shop_images/Rustic_Ceramic_Mugs_in_Warm_Sunlight.png"
+          }
+        },
+        "c2": {
+          "type": "tile",
+          "settings": {
+            "collection": "plates",
+            "image": "shopify://shop_images/photo-1711294545563-3b7fe2816603.jpg"
+          }
+        },
+        "c3": {
+          "type": "tile",
+          "settings": {
+            "collection": "planters",
+            "image": "shopify://shop_images/photo-1592064465579-6796bfdaa5cd.jpg"
+          }
+        },
+        "c4": {
+          "type": "tile",
+          "settings": {
+            "collection": "gift-sets",
+            "image": "shopify://shop_images/terracotta-kolam-mug.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4"
+      ],
+      "settings": {
+        "heading": "Our collections",
+        "heading_size": "h1",
+        "flourish": true,
+        "subheading": "Timeless pottery for your home and the people you love",
+        "columns": 4,
+        "color_scheme": "scheme-1",
+        "padding_top": 36,
+        "padding_bottom": 24,
+        "leaves": "none"
+      }
+    },
+    "products": {
+      "type": "product-columns",
+      "blocks": {
+        "l1": {
+          "type": "list",
+          "settings": {
+            "heading": "Best sellers",
+            "subheading": "Our most loved pieces",
+            "collection": "best-sellers",
+            "count": 3,
+            "view_all_label": "View all"
+          }
+        },
+        "l2": {
+          "type": "list",
+          "settings": {
+            "heading": "New arrivals",
+            "subheading": "Fresh from the studio",
+            "collection": "new-arrivals",
+            "count": 3,
+            "view_all_label": "View all"
+          }
+        }
+      },
+      "block_order": [
+        "l1",
+        "l2"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "padding_top": 24,
         "padding_bottom": 36
+      }
+    },
+    "glaze-workshop": {
+      "type": "feature-panels",
+      "blocks": {
+        "g": {
+          "type": "glaze_palette",
+          "settings": {
+            "heading": "Choose your glaze",
+            "text": "<p>Four signature finishes, each with its own character.</p>",
+            "collection": "shop",
+            "filter_option": "Glaze",
+            "color_scheme": "scheme-2",
+            "image": "shopify://shop_images/ocean-glaze-mug-blue.jpg"
+          }
+        },
+        "w": {
+          "type": "workshop",
+          "settings": {
+            "product": "weekend-pottery-workshop",
+            "badge": "Pottery workshops",
+            "heading": "Get hands-on with clay!",
+            "text": "<p>Learn the art of pottery at our Chennai studio.</p>",
+            "seats_label": "[seats] seats only",
+            "full_label": "New dates coming soon",
+            "button_label": "Book your spot",
+            "color_scheme": "scheme-3",
+            "image": "shopify://shop_images/Hands_Shaping_Clay_on_a_Spinning_Wheel.png"
+          }
+        }
+      },
+      "block_order": [
+        "g",
+        "w"
+      ],
+      "settings": {
+        "split": "wide-right",
+        "color_scheme": "scheme-1",
+        "padding_top": 16,
+        "padding_bottom": 16
+      }
+    },
+    "process-reviews": {
+      "type": "feature-panels",
+      "blocks": {
+        "p": {
+          "type": "process",
+          "settings": {
+            "heading": "Our craft process",
+            "text": "The journey from clay to your home.",
+            "step_1_label": "Shape",
+            "step_2_label": "Dry",
+            "step_3_label": "Fire",
+            "step_4_label": "Glaze",
+            "step_5_label": "Finish",
+            "color_scheme": "scheme-1",
+            "step_1_image": "shopify://shop_images/Hands_Shaping_Clay_on_a_Spinning_Wheel.png",
+            "step_2_image": "shopify://shop_images/Sunlit_Student_Pottery_Shelf.png",
+            "step_3_image": "shopify://shop_images/Rustic_Raku_Ceramics_Still_Life.png",
+            "step_4_image": "shopify://shop_images/ocean-glaze-mug-blue.jpg",
+            "step_5_image": "shopify://shop_images/leaf-mug-cobalt.jpg"
+          }
+        },
+        "r": {
+          "type": "testimonials",
+          "settings": {
+            "heading": "Customer reviews",
+            "quote_1": "Absolutely love the mug! The craftsmanship is outstanding and the packaging was beautiful.",
+            "name_1": "Priya S., Chennai",
+            "quote_2": "Bought the gift set for my sister's housewarming. The handwritten note made her cry.",
+            "name_2": "Karthik R., Bengaluru",
+            "quote_3": "The workshop was the calmest Saturday I've had in months. My wonky bowl is my favourite thing.",
+            "name_3": "Divya M., Chennai",
+            "color_scheme": "scheme-1",
+            "image_1": "shopify://shop_images/Steaming_Kolam_Terracotta_Coffee_Moment.png",
+            "image_2": "shopify://shop_images/Sunlit_Chai_and_Jasmine_Reading_Nook.png",
+            "image_3": "shopify://shop_images/Joyful_Couple_Shaping_Clay_Together.png"
+          }
+        }
+      },
+      "block_order": [
+        "p",
+        "r"
+      ],
+      "settings": {
+        "split": "wide-left",
+        "color_scheme": "scheme-1",
+        "padding_top": 24,
+        "padding_bottom": 16
+      }
+    },
+    "gifts-faq": {
+      "type": "feature-panels",
+      "blocks": {
+        "gg": {
+          "type": "gift_guide",
+          "settings": {
+            "heading": "Gift guide",
+            "text": "<p>Thoughtful pottery gifts for every occasion.</p>",
+            "button_label": "Explore gift sets",
+            "link": "shopify://collections/gift-sets",
+            "color_scheme": "scheme-5",
+            "image": "shopify://shop_images/Cozy_Diwali_Gift_Guide_Still_Life.png"
+          }
+        },
+        "f": {
+          "type": "faq",
+          "settings": {
+            "heading": "FAQs",
+            "text": "<p>Quick answers to help you shop and book with ease.</p>",
+            "button_label": "View all FAQs",
+            "link": "shopify://pages/faq",
+            "color_scheme": "scheme-2"
+          }
+        }
+      },
+      "block_order": [
+        "gg",
+        "f"
+      ],
+      "settings": {
+        "split": "equal",
+        "color_scheme": "scheme-1",
+        "padding_top": 16,
+        "padding_bottom": 48,
+        "leaves": "bottom-left"
       }
     }
   },
   "order": [
-    "image_banner",
-    "featured_collection"
+    "hero",
+    "trust",
+    "story",
+    "collections",
+    "products",
+    "glaze-workshop",
+    "process-reviews",
+    "gifts-faq"
   ]
 }

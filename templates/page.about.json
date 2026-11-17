@@ -1,0 +1,231 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {}
+    },
+    "origin": {
+      "type": "studio-story",
+      "blocks": {
+        "e": {
+          "type": "eyebrow",
+          "settings": {
+            "text": "Since 2019, Adyar"
+          }
+        },
+        "h": {
+          "type": "heading",
+          "settings": {
+            "heading": "Two potters,\none small studio",
+            "size": "h0"
+          }
+        },
+        "t": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Kolam & Clay started in a rented garage in Adyar with one second-hand wheel and a kiln we had to share with a neighbour's generator. Meera had trained in ceramics in Pondicherry. Arjun had just quit software testing after a weekend class he couldn't stop thinking about.</p><p>We still make everything ourselves. Meera carves and paints the kolam patterns; Arjun mixes the glazes and looks after the kiln. Between us we throw about forty pieces a week.</p>"
+          }
+        },
+        "q": {
+          "type": "quote",
+          "settings": {
+            "quote": "We make the pieces we wanted on our own kitchen shelves.",
+            "author": "Meera & Arjun"
+          }
+        },
+        "f": {
+          "type": "founders",
+          "settings": {
+            "names": "Meera Raghavan & Arjun Selvam",
+            "role": "Founders and potters",
+            "portrait": "shopify://shop_images/Joyful_Pottery_Studio_Collaboration.png"
+          }
+        }
+      },
+      "block_order": [
+        "e",
+        "h",
+        "t",
+        "q",
+        "f"
+      ],
+      "settings": {
+        "layout": "collage",
+        "image_ratio": "portrait",
+        "media_share": 45,
+        "vertical_align": "center",
+        "text_align": "left",
+        "panel": false,
+        "heading_as_h1": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 32,
+        "padding_bottom": 56,
+        "image": "shopify://shop_images/Joyful_Couple_Shaping_Clay_Together.png",
+        "image_2": "shopify://shop_images/Hands_Shaping_Clay_on_a_Spinning_Wheel.png"
+      }
+    },
+    "values": {
+      "type": "icon-strip",
+      "blocks": {
+        "v1": {
+          "type": "item",
+          "settings": {
+            "icon": "hand",
+            "text": "<p><strong>Made by hand</strong><br>Thrown, trimmed and glazed by us</p>"
+          }
+        },
+        "v2": {
+          "type": "item",
+          "settings": {
+            "icon": "leaf",
+            "text": "<p><strong>Lead-free glazes</strong><br>Mixed and tested in the studio</p>"
+          }
+        },
+        "v3": {
+          "type": "item",
+          "settings": {
+            "icon": "box",
+            "text": "<p><strong>Plastic-free packing</strong><br>Paper, card and jute only</p>"
+          }
+        },
+        "v4": {
+          "type": "item",
+          "settings": {
+            "icon": "flame",
+            "text": "<p><strong>Fired to 1240°C</strong><br>Strong enough for daily use</p>"
+          }
+        }
+      },
+      "block_order": [
+        "v1",
+        "v2",
+        "v3",
+        "v4"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    },
+    "kolam": {
+      "type": "studio-story",
+      "blocks": {
+        "e": {
+          "type": "eyebrow",
+          "settings": {
+            "text": "Why kolam"
+          }
+        },
+        "h": {
+          "type": "heading",
+          "settings": {
+            "heading": "A line drawn every morning",
+            "size": "h1"
+          }
+        },
+        "t": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Across Tamil Nadu, women draw kolam at the doorstep before sunrise, a single looping line around a grid of dots, in rice flour so ants and birds can eat it by evening. It's made to be lived with, then made again.</p><p>That's how we think about pottery. Our mugs and plates are meant to be used every day, chipped a little, loved a lot.</p>"
+          }
+        },
+        "s": {
+          "type": "stats",
+          "settings": {
+            "value_1": "2019",
+            "label_1": "First firing",
+            "value_2": "4",
+            "label_2": "Glazes we mix ourselves",
+            "value_3": "1,200+",
+            "label_3": "Workshop students"
+          }
+        },
+        "b": {
+          "type": "button",
+          "settings": {
+            "label": "Meet the makers",
+            "link": "shopify://pages/our-makers",
+            "style": "button--clay"
+          }
+        }
+      },
+      "block_order": [
+        "e",
+        "h",
+        "t",
+        "s",
+        "b"
+      ],
+      "settings": {
+        "layout": "image_right",
+        "image_ratio": "landscape",
+        "media_share": 50,
+        "vertical_align": "center",
+        "text_align": "left",
+        "panel": true,
+        "heading_as_h1": false,
+        "color_scheme": "scheme-1",
+        "padding_top": 56,
+        "padding_bottom": 40,
+        "leaves": "bottom-left",
+        "image": "shopify://shop_images/Golden_Sunrise_Kolam_Ritual.png",
+        "accent_image": "shopify://shop_images/Watercolor_South_Indian_Temple_Gopuram.png"
+      }
+    },
+    "process": {
+      "type": "feature-panels",
+      "blocks": {
+        "p": {
+          "type": "process",
+          "settings": {
+            "heading": "From clay to your table",
+            "text": "Every piece passes through our hands at least six times over three weeks.",
+            "step_1_label": "Shape",
+            "step_2_label": "Dry",
+            "step_3_label": "Fire",
+            "step_4_label": "Glaze",
+            "step_5_label": "Finish",
+            "color_scheme": "scheme-1",
+            "step_1_image": "shopify://shop_images/Hands_Shaping_Clay_on_a_Spinning_Wheel.png",
+            "step_2_image": "shopify://shop_images/Sunlit_Student_Pottery_Shelf.png",
+            "step_3_image": "shopify://shop_images/Rustic_Raku_Ceramics_Still_Life.png",
+            "step_4_image": "shopify://shop_images/ocean-glaze-mug-blue.jpg",
+            "step_5_image": "shopify://shop_images/leaf-mug-cobalt.jpg"
+          }
+        },
+        "w": {
+          "type": "workshop",
+          "settings": {
+            "product": "weekend-pottery-workshop",
+            "badge": "Pottery workshops",
+            "heading": "Come and make one yourself",
+            "text": "<p>Weekend classes at the studio, for complete beginners.</p>",
+            "seats_label": "[seats] seats left",
+            "full_label": "New dates coming soon",
+            "button_label": "Book your spot",
+            "color_scheme": "scheme-3",
+            "image": "shopify://shop_images/Hands_Shaping_Clay_on_a_Spinning_Wheel.png"
+          }
+        }
+      },
+      "block_order": [
+        "p",
+        "w"
+      ],
+      "settings": {
+        "split": "equal",
+        "color_scheme": "scheme-1",
+        "padding_top": 16,
+        "padding_bottom": 56
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "origin",
+    "values",
+    "kolam",
+    "process"
+  ]
+}

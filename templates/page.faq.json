@@ -1,0 +1,46 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "breadcrumbs": { "type": "breadcrumbs", "settings": {} },
+    "main": { "type": "main-page", "settings": { "padding_top": 28, "padding_bottom": 8 } },
+    "orders": {
+      "type": "feature-panels",
+      "blocks": {
+        "f1": { "type": "faq", "settings": {
+          "heading": "Orders & shipping", "text": "<p>Rates, delivery times and where we ship.</p>", "button_label": "", "link": "",
+          "question_1": "Where do you ship?", "answer_1": "<p>Across India, and to the UAE and the US. International prices are shown in AED or USD at checkout.</p>",
+          "question_2": "How long does delivery take?", "answer_2": "<p>Tamil Nadu 2–4 working days, rest of India 4–7, UAE and US 7–12. Orders leave the studio within 2 working days.</p>",
+          "question_3": "Is shipping free?", "answer_3": "<p>Free across India on orders of ₹1,499 or more. Below that it's ₹79 in Tamil Nadu and ₹149 for the rest of India.</p>",
+          "question_4": "Do prices include GST?", "answer_4": "<p>Yes. Prices in India include GST. International orders may attract import duty, paid on delivery.</p>",
+          "question_5": "What if something arrives broken?", "answer_5": "<p>Send us a photo within 48 hours of delivery and we'll replace it or refund you in full. You don't need to send it back.</p>",
+          "color_scheme": "scheme-2" } }
+      },
+      "block_order": ["f1"],
+      "settings": { "split": "full", "color_scheme": "scheme-1", "padding_top": 16, "padding_bottom": 16 }
+    },
+    "care": {
+      "type": "feature-panels",
+      "blocks": {
+        "f2": { "type": "faq", "settings": {
+          "heading": "Pottery & workshops", "text": "<p>Caring for handmade pieces and booking a class.</p>", "button_label": "Write to us", "link": "shopify://pages/contact",
+          "question_1": "Is your pottery food safe?", "answer_1": "<p>Yes. Our glazes are lead free and our stoneware is fired to 1240°C. Mugs, plates and bowls are microwave and dishwasher safe.</p>",
+          "question_2": "Why does my piece look slightly different from the photo?", "answer_2": "<p>Each piece is thrown and glazed by hand, so glaze breaks, speckles and carving vary a little. That's part of what makes it yours.</p>",
+          "question_3": "What does one of a kind mean?", "answer_3": "<p>We make that piece only once. When it sells, it stays on the site as part of our archive but can't be bought again.</p>",
+          "question_4": "Can I book a workshop for a group?", "answer_4": "<p>Yes. We host private sessions for 6 to 12 people on weekdays. Write to us with a date.</p>",
+          "question_5": "Can I add a gift note?", "answer_5": "<p>Yes, on gift sets. Type up to 40 characters in your cart and we'll handwrite it on a card inside the box.</p>",
+          "color_scheme": "scheme-2" } }
+      },
+      "block_order": ["f2"],
+      "settings": { "split": "full", "color_scheme": "scheme-1", "padding_top": 16, "padding_bottom": 56 }
+    }
+  },
+  "order": ["breadcrumbs", "main", "orders", "care"]
+}

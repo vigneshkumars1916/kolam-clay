@@ -1,0 +1,95 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {
+        "makers_link": "/pages/our-makers"
+      }
+    },
+    "booking": {
+      "type": "workshop-booking",
+      "blocks": {
+        "i1": {
+          "type": "included",
+          "settings": {
+            "icon": "cloud",
+            "text": "All materials (clay, tools, apron)"
+          }
+        },
+        "i2": {
+          "type": "included",
+          "settings": {
+            "icon": "cup",
+            "text": "Hands-on guidance from a potter"
+          }
+        },
+        "i3": {
+          "type": "included",
+          "settings": {
+            "icon": "box",
+            "text": "We fire your piece and you take it home"
+          }
+        },
+        "i4": {
+          "type": "included",
+          "settings": {
+            "icon": "bookmark",
+            "text": "Made for complete beginners"
+          }
+        }
+      },
+      "block_order": [
+        "i1",
+        "i2",
+        "i3",
+        "i4"
+      ],
+      "settings": {}
+    },
+    "group": {
+      "type": "cta-banner",
+      "settings": {
+        "link": "/pages/contact",
+        "leaves": "bottom-right",
+        "image": "shopify://shop_images/Joyful_Pottery_Workshop_Together.png"
+      }
+    },
+    "faq": {
+      "type": "feature-panels",
+      "blocks": {
+        "faq": {
+          "type": "faq",
+          "settings": {
+            "heading": "Before you come",
+            "text": "<p>The questions we're asked most about workshops.</p>",
+            "button_label": "Ask us anything",
+            "link": "/pages/contact",
+            "question_1": "Do I need any experience?",
+            "answer_1": "<p>None at all. Most people at our weekend sessions have never touched a wheel.</p>",
+            "question_2": "When can I collect my piece?",
+            "answer_2": "<p>About three weeks later, once it has been trimmed, glazed and fired. We'll message you when it's ready, or courier it within Chennai.</p>",
+            "question_3": "What should I wear?",
+            "answer_3": "<p>Comfortable clothes you don't mind getting clay on. We provide aprons. Short nails help.</p>",
+            "question_4": "Can I change my date?",
+            "answer_4": "<p>Yes, up to 48 hours before your session. After that, you can send a friend in your place.</p>",
+            "question_5": "Is there a minimum age?",
+            "answer_5": "<p>Participants should be 12 or older. Under 16s need an adult with them.</p>",
+            "color_scheme": "scheme-2"
+          }
+        }
+      },
+      "block_order": [
+        "faq"
+      ],
+      "settings": {
+        "split": "full"
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "booking",
+    "group",
+    "faq"
+  ]
+}
