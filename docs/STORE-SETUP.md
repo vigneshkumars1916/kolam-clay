@@ -15,11 +15,12 @@ Settings that live in Shopify admin rather than in the theme, as configured on k
 - **India** is the primary market and checkout currency.
 - Shopify only charges in a local currency through Shopify Payments, which isn't available for stores based in India. The theme's currency selector therefore converts prices for display, and checkout is always charged in INR. The cart shows a note saying so whenever a currency other than INR is selected.
 
-## Shipping (Settings → Markets → India → Shipping)
+## Shipping (Settings → Markets → each market → Shipping)
 
 | Market | Option | Rate |
 | --- | --- | --- |
-| India | Standard delivery | ₹120, free on orders of ₹1,499 or more |
+| Tamil Nadu (sub-market of India) | Standard delivery (Tamil Nadu) | ₹60, free on orders of ₹1,499 or more |
+| India (rest of India) | Standard delivery | ₹120, free on orders of ₹1,499 or more |
 | International markets | International shipping | ₹1,800 per order |
 
 Workshop tickets are set to **not require shipping**, so a cart with only tickets skips the delivery step.
