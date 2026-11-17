@@ -33,7 +33,22 @@ shopify theme pull --store kolam-clay.myshopify.com --only templates/*.json --on
 | Workshop booking | `sections/workshop-booking.liquid`, `assets/workshop-booking.js`, `templates/product.workshop.json` |
 | Gift note in cart | `snippets/gift-note-field.liquid`, `assets/gift-note.js` |
 | Makers | `sections/makers-grid.liquid`, `sections/maker-profile.liquid`, `templates/metaobject/potter.json`, `templates/page.makers.json` |
+| Currency selector (display conversion from INR) | `snippets/currency-converter.liquid`, `assets/currency-converter.js`, header hook in `sections/header.liquid`, settings under **Theme settings → Currency converter** |
+| Estimated delivery dates | `snippets/delivery-estimate.liquid`, `assets/delivery-estimate.js`, `delivery_estimate` block in `sections/main-product.liquid` |
 | Structured data | `snippets/product-structured-data.liquid`, `snippets/workshop-structured-data.liquid`, `snippets/organization-structured-data.liquid`, breadcrumbs and FAQ sections |
+
+## Repository layout
+
+```
+assets/      CSS and JavaScript (Dawn files plus section-*.css, brand.css and the custom scripts above)
+config/      settings_schema.json (theme settings) and settings_data.json (current values)
+layout/      theme.liquid and password.liquid
+locales/     storefront and theme editor translations
+sections/    Dawn sections plus the custom sections listed above
+snippets/    shared Liquid partials
+templates/   JSON templates, including product.workshop.json and metaobject/potter.json
+docs/        store setup notes, implementation notes and policy page copy
+```
 
 ## Data the theme expects
 
@@ -58,3 +73,5 @@ Everything below is done in **Online Store → Themes → Customize**. Nothing n
 - **Workshop dates**: add a variant with the date and time slot, set its stock to the number of seats, and fill in *Session starts* and *Session ends*. The calendar, seat count and search engine event data update on their own. Shopify won't sell more seats than the stock.
 - **Gift notes**: tick *Allow gift note* on any product. Buyers get a 40-character note field in the cart, and the note appears on the order.
 - **New potter**: Content → Metaobjects → Potter → Add entry. Their page and the Our Makers grid update automatically. Pick them in a product's *Maker* field to link their work.
+- **Currency selector**: Theme settings → Currency converter. Choose which currencies appear, turn live rates on or off, edit the fallback rates and the note shown in the cart. Prices are converted for display only; checkout is always charged in INR.
+- **Delivery estimate**: on the product template, select the *Estimated delivery* block to change the delivery windows for each region, the dispatch time and the daily cut-off hour.

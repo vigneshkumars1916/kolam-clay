@@ -1,6 +1,6 @@
-# Build notes
+# Implementation notes
 
-Technical facts about how each brief item is implemented and the Shopify limits hit along the way. Use them as reference when writing DECISIONS.md. They're not a substitute for it.
+How each item in the brief is implemented, and the Shopify limits that shaped the build. Product decisions and their reasoning are in DECISIONS.md.
 
 ## Must items: where they live
 
@@ -16,7 +16,7 @@ Technical facts about how each brief item is implemented and the Shopify limits 
 ## Should items
 
 - **7 – Filters and swatches:** vertical filter sidebar from Dawn; glaze colour dots added to filter values; swatches on product cards link to that glaze's variant. Glaze, product type and filter order are configured in the free Search & Discovery app.
-- **8 – Lighthouse:** not measured yet, because photos aren't uploaded. Things already in place that help: one hero image loaded eagerly with `fetchpriority=high`, everything else lazy, `srcset` widths on every image, two font families only, no third-party apps, section CSS split per section.
+- **8 – Lighthouse:** measured on a mobile product page (see DECISIONS.md). What helps: one hero image loaded eagerly with `fetchpriority=high`, everything else lazy, `srcset` widths on every image, two font families only, no third-party apps, section CSS split per section.
 
 ## Shopify limitations hit
 
@@ -24,11 +24,10 @@ Technical facts about how each brief item is implemented and the Shopify limits 
 - **Workshop "nothing shipped":** the variants are set to not require shipping, so ticket-only carts skip delivery.
 - **One card per glaze:** Shopify's combined listings, which do this natively, are Shopify Plus only. Liquid can loop variants inside a collection grid, but it breaks pagination counts and filters.
 - **Gift note limit:** line item properties have no server-side length validation, so the 40-character limit is enforced in the theme (input `maxlength` and in JS before saving).
-- **Policies:** the Admin API scope available here can't write legal policies; they're pasted in admin.
 - **Root files for AI crawlers (e.g. `/llms.txt`):** Shopify themes can't serve arbitrary files at the domain root.
 - **Store timezone:** session dates are formatted in the store's timezone, so the store must be set to IST for dates to show correctly.
 
-## Open decisions (yours to make)
+## Client requests: technical facts
 
 | Request | Technical facts that bear on it |
 | --- | --- |
@@ -36,6 +35,12 @@ Technical facts about how each brief item is implemented and the Shopify limits 
 | B – sold one-of-a-kind stays as portfolio | Already behaves this way: product stays published, sold label + message, add to cart disabled, offer marked `SoldOut` in structured data. |
 | C – every glaze as its own card | See limitation above. Current build: one card per product with clickable glaze swatches. |
 | D – never oversell workshops, show seats | Built: inventory-tracked variants, seats left on the workshop page, product cards and homepage promo. |
-| E – estimated delivery date abroad | Not built. Possible inputs: `localization.country` for the buyer's market and day ranges from the shipping policy. Shopify has no carrier ETA available to themes. |
+| E – estimated delivery date abroad | Built as a product page block: delivery windows per region (Tamil Nadu, rest of India, international), counted in working days from dispatch, skipping Sundays, with a daily cut-off in IST. Shopify has no carrier ETA available to themes, so the windows are merchant-set. |
 | Reviews / ratings in the design | No paid apps allowed; there are no real reviews yet. The homepage "Customer words" panel holds editable quotes. Decide whether to keep, label or remove it. |
 | Wishlist hearts in the design | Not built; needs either an app or a browser-storage-only list. |
+
+## Additions after the first build
+
+- **Currency selector:** a header control that converts every INR price on the page (product, collection, search, cart drawer and cart page) for display. Rates come from a daily reference-rate API, cached for 12 hours in the browser, with fallback rates in theme settings. A `MutationObserver` re-converts prices that the theme renders later (variant changes, cart updates, facet filtering). The selected currency is kept in `localStorage`. Native multi-currency checkout needs Shopify Payments, which isn't available to India-based stores, so checkout stays in INR and the cart says so.
+- **Market-driven shipping:** this store uses Shopify's market-level shipping options rather than shipping profiles. A market without a shipping option makes every shippable product show as sold out, so each market has one.
+- **GST:** prices include tax; pottery is 5% (CGST + SGST within Tamil Nadu, IGST elsewhere) and workshops are 18% via a collection override.
